@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Fullstack Point-Virgule — Développeur Web Fullstack Freelance",
   description:
     "Yannick Franchaisse — Développeur Web Fullstack freelance. Sites e-commerce, applications web, APIs sur mesure. Next.js, React, Node.js, TypeScript.",
+  icons: {
+    icon: "/images/favicon.png",
+    apple: "/images/favicon.png",
+  },
 };
 
 export default function RootLayout({
