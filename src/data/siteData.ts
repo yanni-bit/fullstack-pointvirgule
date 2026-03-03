@@ -72,7 +72,12 @@ export const TECH_STACK = [
 ];
 
 export const CONTACT_INFO = [
-  { icon: "💬", label: "WhatsApp", value: "Me contacter", href: "https://wa.me/33650148605" },
-  { icon: "📧", label: "Email", value: "contact@fullstack-pointvirgule.fr", href: "mailto:contact@fullstack-pointvirgule.fr" },
-  { icon: "📍", label: "Localisation", value: "Gisors, Normandie", href: null },
+  { icon: "💬", label: "WhatsApp", value: ["Me contacter"], href: "https://wa.me/33650148605" },
+  { icon: "📧", label: "Email", value: ["contact@fullstack-pointvirgule.fr"], href: "mailto:contact@fullstack-pointvirgule.fr" },
+  { 
+    icon: "📍", 
+    label: "Localisation", 
+    value: ["Gisors, Normandie", "Lalande en Son, Oise"], 
+    href: null 
+  },
 ];

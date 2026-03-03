@@ -61,7 +61,7 @@ export default function Services() {
   const { ref, visible } = useInView();
 
   return (
-    <section id="services" style={{ padding: "100px 24px" }}>
+    <section id="services" style={{ padding: "50px 24px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div
           ref={ref}

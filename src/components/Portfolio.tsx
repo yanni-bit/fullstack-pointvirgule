@@ -99,7 +99,7 @@ export default function Portfolio() {
   const { ref, visible } = useInView();
 
   return (
-    <section id="portfolio" style={{ padding: "100px 24px" }}>
+    <section id="portfolio" style={{ padding: "50px 24px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div
           ref={ref}

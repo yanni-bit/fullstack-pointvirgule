@@ -22,7 +22,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" style={{ padding: "100px 24px 60px" }}>
+    <section id="contact" style={{ padding: "50px 24px 60px" }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
         <div
           ref={ref}
@@ -59,7 +59,7 @@ export default function Contact() {
             Parlons de votre projet
           </h2>
           <p style={{ color: "var(--text2)", fontSize: 16 }}>
-            R&#233;ponse sous 24h garantie.
+            Réponse sous 24h garantie.
           </p>
         </div>
 
@@ -94,8 +94,22 @@ export default function Contact() {
                 }}
               >
                 <span style={{ fontSize: 22 }}>{c.icon}</span>
-                <small style={{ color: "var(--text3)", fontSize: 12 }}>{c.label}</small>
-                <strong style={{ color: "#fff", fontSize: 14 }}>{c.value}</strong>
+                <small style={{ color: "var(--text3)", fontSize: 12 }}>
+                  {c.label}
+                </small>
+                {c.value.map((text, idx) => (
+                  <strong
+                    key={idx}
+                    style={{
+                      color: "#fff",
+                      fontSize: 14,
+                      textAlign: "center",
+                      display: "block",
+                    }}
+                  >
+                    {text}
+                  </strong>
+                ))}
               </a>
             );
           })}
@@ -111,21 +125,36 @@ export default function Contact() {
         >
           {sent ? (
             <div style={{ textAlign: "center", padding: "48px 24px" }}>
-              <div style={{ fontSize: 48, marginBottom: 16 }}>&#9989;</div>
-              <h3 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 6 }}>
-                Message envoy&#233; !
+              <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+              <h3
+                style={{
+                  color: "#fff",
+                  fontSize: 20,
+                  fontWeight: 700,
+                  marginBottom: 6,
+                }}
+              >
+                Message envoyé !
               </h3>
-              <p style={{ color: "var(--text2)" }}>Je vous recontacte sous 24h.</p>
+              <p style={{ color: "var(--text2)" }}>
+                Je vous recontacte sous 24h.
+              </p>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 14,
+                }}
+              >
                 <input placeholder="Nom" style={inputStyle} />
                 <input placeholder="Email" type="email" style={inputStyle} />
               </div>
               <input placeholder="Sujet" style={inputStyle} />
               <textarea
-                placeholder="D&#233;crivez votre projet..."
+                placeholder="Décrivez votre projet..."
                 rows={5}
                 style={{
                   ...inputStyle,
@@ -140,7 +169,8 @@ export default function Contact() {
                   padding: 16,
                   borderRadius: 10,
                   border: "none",
-                  background: "linear-gradient(135deg, var(--blue), var(--blue-d))",
+                  background:
+                    "linear-gradient(135deg, var(--blue), var(--blue-d))",
                   color: "#fff",
                   fontSize: 16,
                   fontWeight: 700,

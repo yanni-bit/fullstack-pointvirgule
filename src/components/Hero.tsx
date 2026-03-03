@@ -192,7 +192,7 @@ export default function Hero() {
             borderRadius: 12,
             overflow: "hidden",
             border: "1px solid var(--border)",
-            maxWidth: 540,
+            maxWidth: 440,
             marginLeft: "auto",
             marginRight: "auto",
             textAlign: "left",

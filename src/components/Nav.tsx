@@ -130,10 +130,10 @@ export default function Nav() {
             textDecoration: "none",
           }}
         >
-          <Logo size={32} />
-          <span style={{ fontSize: 17, fontWeight: 700, color: "#fff" }}>
+          <Logo size={42} />
+          <span style={{ fontSize: 19, fontWeight: 700, color: "var(--blue)" }}>
             Fullstack{" "}
-            <span style={{ color: "var(--blue)" }}>Point-Virgule</span>
+            <span style={{ color: "#fff" }}>Point-Virgule</span>
           </span>
         </Link>
 
