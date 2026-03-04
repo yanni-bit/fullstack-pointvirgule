@@ -60,7 +60,7 @@ export default function TechStack() {
                 padding: 24,
               }}
             >
-              <h4
+              <h3
                 style={{
                   color: "var(--blue)",
                   fontSize: 12,
@@ -72,7 +72,7 @@ export default function TechStack() {
                 }}
               >
                 {cat.category}
-              </h4>
+              </h3>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {cat.items.map((item) => (
                   <span

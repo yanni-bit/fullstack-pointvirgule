@@ -12,7 +12,7 @@
   --green: #22c55e;
   --text: #E2E8F0;
   --text2: #94A3B8;
-  --text3: #64748B;
+  --text3: #8B9BB4;
   --radius: 14px;
 }
 
@@ -28,7 +28,7 @@ html[data-theme="light"] {
   --green: #16a34a;
   --text: #0F172A;
   --text2: #475569;
-  --text3: #94A3B8;
+  --text3: #64748B;
   --radius: 14px;
 }
 
