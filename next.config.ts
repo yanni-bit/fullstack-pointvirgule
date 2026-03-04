@@ -14,7 +14,6 @@ const securityHeaders = [
       "font-src 'self'",
       "connect-src 'self' https://*.supabase.co",
       "frame-ancestors 'none'",
-      "require-trusted-types-for 'script'",
     ].join("; "),
   },
   { key: "X-Content-Type-Options", value: "nosniff" },
