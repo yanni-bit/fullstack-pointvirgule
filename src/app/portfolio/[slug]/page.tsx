@@ -48,8 +48,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             marginBottom: 40,
             transition: "color 0.2s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text3)")}
         >
           ← Retour aux réalisations
         </Link>
