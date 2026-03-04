@@ -86,7 +86,7 @@ export default async function ProjectPage({
           padding: 24,
         }}
       >
-        <h3
+        <h2
           style={{
             color: "var(--text)",
             fontSize: 14,
@@ -95,7 +95,7 @@ export default async function ProjectPage({
           }}
         >
           Informations
-        </h3>
+        </h2>
         {project.client && (
           <div style={{ marginBottom: 12 }}>
             <small style={{ color: "var(--text3)", fontSize: 12 }}>
@@ -130,7 +130,7 @@ export default async function ProjectPage({
             padding: 24,
           }}
         >
-          <h3
+          <h2
             style={{
               color: "var(--text)",
               fontSize: 14,
@@ -139,7 +139,7 @@ export default async function ProjectPage({
             }}
           >
             Stack technique
-          </h3>
+          </h2>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {project.tags.map((t: string) => (
               <span
