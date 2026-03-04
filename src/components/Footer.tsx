@@ -28,7 +28,8 @@ export default function Footer() {
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <Image
             src="/images/logo.png"
-            alt="Fullstack Point-Virgule"
+            alt=""
+            aria-hidden="true"
             width={22}
             height={22}
           />
@@ -36,24 +37,26 @@ export default function Footer() {
             © 2026 Fullstack Point-Virgule · Yannick Franchaisse
           </span>
         </div>
-        <div style={{ display: "flex", gap: 20 }}>
-          {links.map((l) => (
-            <a
-              key={l.label}
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                color: "var(--text3)",
-                fontSize: 13,
-                textDecoration: "none",
-                transition: "color 0.2s",
-              }}
-            >
-              {l.label}
-            </a>
-          ))}
-        </div>
+        <nav aria-label="Liens réseaux">
+          <div style={{ display: "flex", gap: 20 }}>
+            {links.map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "var(--text3)",
+                  fontSize: 13,
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}
+              >
+                {l.label}
+              </a>
+            ))}
+          </div>
+        </nav>
       </div>
     </footer>
   );

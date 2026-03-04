@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import type { Project } from "../../lib/supabase";
 
 type FormData = {
@@ -60,7 +60,7 @@ function sanitizeFileName(name: string): string {
   return name
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9._-]/g, "-")
     .replace(/-+/g, "-");
 }
@@ -70,7 +70,7 @@ function sanitizeFolder(slug: string): string {
     slug
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
+      .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9-]/g, "-")
       .replace(/-+/g, "-")
       .replace(/(^-|-$)/g, "") || "projet"
@@ -90,12 +90,13 @@ export default function AdminPage() {
   const [message, setMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
 
+  // Styles adaptés light/dark via variables CSS
   const inputStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.1)",
+    background: "var(--surface)",
+    border: "1px solid var(--border)",
     borderRadius: 8,
     padding: "10px 14px",
-    color: "#fff",
+    color: "var(--text)",
     fontSize: 14,
     fontFamily: "inherit",
     outline: "none",
@@ -166,7 +167,6 @@ export default function AdminPage() {
     setUploadingImages(true);
     const supabase = getSupabase();
     const uploaded: string[] = [];
-
     for (const file of Array.from(files)) {
       const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
       const baseName = file.name.replace(/\.[^.]+$/, "");
@@ -174,30 +174,22 @@ export default function AdminPage() {
       const safeFolder = sanitizeFolder(form.slug);
       const fileName = `${Date.now()}-${safeName}.${ext}`;
       const filePath = `gallery/${safeFolder}/${fileName}`;
-
       const { error } = await supabase.storage
         .from("projects")
         .upload(filePath, file, { upsert: false });
-
       if (error) {
         setMessage(`❌ Erreur upload ${file.name} : ${error.message}`);
         continue;
       }
-
       const { data: urlData } = supabase.storage
         .from("projects")
         .getPublicUrl(filePath);
-
-      if (urlData?.publicUrl) {
-        uploaded.push(urlData.publicUrl);
-      }
+      if (urlData?.publicUrl) uploaded.push(urlData.publicUrl);
     }
-
     setGalleryImages((prev) => [...prev, ...uploaded]);
     setUploadingImages(false);
-    if (uploaded.length > 0) {
+    if (uploaded.length > 0)
       setMessage(`✅ ${uploaded.length} image(s) uploadée(s)`);
-    }
   }
 
   async function handleRemoveImage(url: string) {
@@ -211,7 +203,6 @@ export default function AdminPage() {
     }
     setLoading(true);
     setMessage("");
-
     const payload = {
       ...form,
       tags: form.tags
@@ -224,12 +215,10 @@ export default function AdminPage() {
         .filter(Boolean),
       images: galleryImages,
     };
-
     const url = editingId
       ? `/api/admin/projects/${editingId}`
       : "/api/projects";
     const method = editingId ? "PUT" : "POST";
-
     const res = await fetch(url, {
       method,
       headers: {
@@ -238,7 +227,6 @@ export default function AdminPage() {
       },
       body: JSON.stringify(payload),
     });
-
     if (res.ok) {
       setMessage(editingId ? "✅ Projet modifié !" : "✅ Projet créé !");
       setForm(emptyForm);
@@ -290,7 +278,7 @@ export default function AdminPage() {
         >
           <h1
             style={{
-              color: "#fff",
+              color: "var(--text)",
               fontSize: 24,
               fontWeight: 800,
               marginBottom: 8,
@@ -301,7 +289,11 @@ export default function AdminPage() {
           <p style={{ color: "var(--text3)", fontSize: 14, marginBottom: 24 }}>
             fullstack-pointvirgule.fr
           </p>
+          <label htmlFor="admin-password" style={labelStyle}>
+            Mot de passe
+          </label>
           <input
+            id="admin-password"
             type="password"
             placeholder="Mot de passe"
             value={password}
@@ -310,7 +302,7 @@ export default function AdminPage() {
             style={{ ...inputStyle, marginBottom: 12 }}
           />
           {authError && (
-            <p style={{ color: "#f87171", fontSize: 13, marginBottom: 12 }}>
+            <p style={{ color: "#ef4444", fontSize: 13, marginBottom: 12 }}>
               {authError}
             </p>
           )}
@@ -354,7 +346,7 @@ export default function AdminPage() {
           }}
         >
           <div>
-            <h1 style={{ color: "#fff", fontSize: 28, fontWeight: 800 }}>
+            <h1 style={{ color: "var(--text)", fontSize: 28, fontWeight: 800 }}>
               Administration
             </h1>
             <p style={{ color: "var(--text3)", fontSize: 14 }}>
@@ -381,12 +373,12 @@ export default function AdminPage() {
         {message && (
           <div
             style={{
-              background: "rgba(255,255,255,0.05)",
+              background: "var(--surface)",
               border: "1px solid var(--border)",
               borderRadius: 10,
               padding: "12px 16px",
               marginBottom: 24,
-              color: "#fff",
+              color: "var(--text)",
               fontSize: 14,
             }}
           >
@@ -413,7 +405,9 @@ export default function AdminPage() {
                 marginBottom: 24,
               }}
             >
-              <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700 }}>
+              <h2
+                style={{ color: "var(--text)", fontSize: 20, fontWeight: 700 }}
+              >
                 {editingId ? "Modifier la réalisation" : "Nouvelle réalisation"}
               </h2>
               <button
@@ -445,8 +439,11 @@ export default function AdminPage() {
               }}
             >
               <div>
-                <label style={labelStyle}>Titre *</label>
+                <label htmlFor="f-title" style={labelStyle}>
+                  Titre *
+                </label>
                 <input
+                  id="f-title"
                   style={inputStyle}
                   value={form.title}
                   onChange={(e) => {
@@ -461,8 +458,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>Slug * (URL)</label>
+                <label htmlFor="f-slug" style={labelStyle}>
+                  Slug * (URL)
+                </label>
                 <input
+                  id="f-slug"
                   style={inputStyle}
                   value={form.slug}
                   onChange={(e) =>
@@ -472,8 +472,11 @@ export default function AdminPage() {
                 />
               </div>
               <div style={{ gridColumn: "1 / -1" }}>
-                <label style={labelStyle}>Description courte</label>
+                <label htmlFor="f-short" style={labelStyle}>
+                  Description courte
+                </label>
                 <input
+                  id="f-short"
                   style={inputStyle}
                   value={form.short_desc}
                   onChange={(e) =>
@@ -483,8 +486,11 @@ export default function AdminPage() {
                 />
               </div>
               <div style={{ gridColumn: "1 / -1" }}>
-                <label style={labelStyle}>Description longue</label>
+                <label htmlFor="f-long" style={labelStyle}>
+                  Description longue
+                </label>
                 <textarea
+                  id="f-long"
                   style={{
                     ...inputStyle,
                     minHeight: 140,
@@ -494,12 +500,15 @@ export default function AdminPage() {
                   onChange={(e) =>
                     setForm((f) => ({ ...f, long_desc: e.target.value }))
                   }
-                  placeholder="Description détaillée du projet, contexte, enjeux, solutions apportées..."
+                  placeholder="Description détaillée du projet..."
                 />
               </div>
               <div style={{ gridColumn: "1 / -1" }}>
-                <label style={labelStyle}>URL image de couverture</label>
+                <label htmlFor="f-cover" style={labelStyle}>
+                  URL image de couverture
+                </label>
                 <input
+                  id="f-cover"
                   style={inputStyle}
                   value={form.cover_url}
                   onChange={(e) =>
@@ -509,10 +518,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>
+                <label htmlFor="f-tags" style={labelStyle}>
                   Tags / Stack (séparés par des virgules)
                 </label>
                 <input
+                  id="f-tags"
                   style={inputStyle}
                   value={form.tags}
                   onChange={(e) =>
@@ -522,10 +532,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>
+                <label htmlFor="f-metrics" style={labelStyle}>
                   Métriques (une par ligne : Label:Valeur)
                 </label>
                 <textarea
+                  id="f-metrics"
                   style={{
                     ...inputStyle,
                     minHeight: 90,
@@ -539,8 +550,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>Client</label>
+                <label htmlFor="f-client" style={labelStyle}>
+                  Client
+                </label>
                 <input
+                  id="f-client"
                   style={inputStyle}
                   value={form.client}
                   onChange={(e) =>
@@ -550,8 +564,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>Date</label>
+                <label htmlFor="f-date" style={labelStyle}>
+                  Date
+                </label>
                 <input
+                  id="f-date"
                   style={inputStyle}
                   value={form.date}
                   onChange={(e) =>
@@ -561,8 +578,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>URL du site</label>
+                <label htmlFor="f-url" style={labelStyle}>
+                  URL du site
+                </label>
                 <input
+                  id="f-url"
                   style={inputStyle}
                   value={form.url}
                   onChange={(e) =>
@@ -572,8 +592,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>URL GitHub</label>
+                <label htmlFor="f-github" style={labelStyle}>
+                  URL GitHub
+                </label>
                 <input
+                  id="f-github"
                   style={inputStyle}
                   value={form.github_url}
                   onChange={(e) =>
@@ -583,8 +606,11 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label style={labelStyle}>Ordre d&apos;affichage</label>
+                <label htmlFor="f-order" style={labelStyle}>
+                  Ordre d&apos;affichage
+                </label>
                 <input
+                  id="f-order"
                   style={inputStyle}
                   type="number"
                   value={form.order_index}
@@ -621,7 +647,7 @@ export default function AdminPage() {
                 </label>
               </div>
 
-              {/* ── GALERIE D'IMAGES ── */}
+              {/* Galerie */}
               <div style={{ gridColumn: "1 / -1", marginTop: 8 }}>
                 <div
                   style={{
@@ -630,16 +656,16 @@ export default function AdminPage() {
                     marginBottom: 16,
                   }}
                 >
-                  <label
+                  <p
                     style={{
                       ...labelStyle,
                       fontSize: 14,
-                      color: "#fff",
+                      color: "var(--text)",
                       marginBottom: 4,
                     }}
                   >
                     Galerie de screenshots
-                  </label>
+                  </p>
                   <p
                     style={{
                       color: "var(--text3)",
@@ -649,8 +675,6 @@ export default function AdminPage() {
                   >
                     JPG, PNG, WebP — plusieurs fichiers acceptés simultanément
                   </p>
-
-                  {/* Zone d'upload */}
                   <label
                     style={{
                       display: "flex",
@@ -658,27 +682,12 @@ export default function AdminPage() {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: 8,
-                      border: "2px dashed rgba(255,255,255,0.15)",
+                      border: "2px dashed var(--border)",
                       borderRadius: 12,
                       padding: "28px 20px",
                       cursor: uploadingImages ? "not-allowed" : "pointer",
-                      background: "rgba(255,255,255,0.02)",
-                      transition: "border-color 0.2s, background 0.2s",
+                      background: "var(--surface)",
                       opacity: uploadingImages ? 0.6 : 1,
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!uploadingImages) {
-                        (e.currentTarget as HTMLElement).style.borderColor =
-                          "rgba(33,150,243,0.5)";
-                        (e.currentTarget as HTMLElement).style.background =
-                          "rgba(33,150,243,0.04)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.borderColor =
-                        "rgba(255,255,255,0.15)";
-                      (e.currentTarget as HTMLElement).style.background =
-                        "rgba(255,255,255,0.02)";
                     }}
                   >
                     <input
@@ -709,7 +718,6 @@ export default function AdminPage() {
                   </label>
                 </div>
 
-                {/* Miniatures existantes */}
                 {galleryImages.length > 0 && (
                   <div>
                     <p
@@ -752,7 +760,6 @@ export default function AdminPage() {
                               display: "block",
                             }}
                           />
-                          {/* Bouton supprimer */}
                           <button
                             onClick={() => handleRemoveImage(img)}
                             title="Retirer de la galerie"
@@ -765,30 +772,13 @@ export default function AdminPage() {
                               width: 24,
                               height: 24,
                               borderRadius: "50%",
-                              background: "rgba(248,113,113,0.9)",
+                              background: "rgba(239,68,68,0.9)",
                               color: "#fff",
                               fontSize: 12,
                               fontWeight: 700,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              lineHeight: 1,
-                              boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-                              transition: "background 0.15s, transform 0.15s",
-                            }}
-                            onMouseEnter={(e) => {
-                              (
-                                e.currentTarget as HTMLElement
-                              ).style.background = "#ef4444";
-                              (e.currentTarget as HTMLElement).style.transform =
-                                "scale(1.15)";
-                            }}
-                            onMouseLeave={(e) => {
-                              (
-                                e.currentTarget as HTMLElement
-                              ).style.background = "rgba(248,113,113,0.9)";
-                              (e.currentTarget as HTMLElement).style.transform =
-                                "scale(1)";
                             }}
                           >
                             ✕
@@ -799,7 +789,6 @@ export default function AdminPage() {
                   </div>
                 )}
               </div>
-              {/* ── FIN GALERIE ── */}
             </div>
 
             <button
@@ -829,7 +818,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Liste des projets */}
+        {/* Liste */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {projects.length === 0 ? (
             <div
@@ -863,11 +852,15 @@ export default function AdminPage() {
                   <div
                     style={{ display: "flex", alignItems: "center", gap: 10 }}
                   >
-                    <h3
-                      style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}
+                    <h2
+                      style={{
+                        color: "var(--text)",
+                        fontSize: 16,
+                        fontWeight: 700,
+                      }}
                     >
                       {project.title}
-                    </h3>
+                    </h2>
                     {project.featured && (
                       <span
                         style={{
@@ -915,8 +908,8 @@ export default function AdminPage() {
                       padding: "8px 16px",
                       borderRadius: 8,
                       border: "1px solid var(--border)",
-                      background: "rgba(255,255,255,0.04)",
-                      color: "#fff",
+                      background: "var(--surface)",
+                      color: "var(--text)",
                       fontSize: 13,
                       fontWeight: 600,
                       cursor: "pointer",
@@ -929,9 +922,9 @@ export default function AdminPage() {
                     style={{
                       padding: "8px 16px",
                       borderRadius: 8,
-                      border: "1px solid rgba(248,113,113,0.3)",
-                      background: "rgba(248,113,113,0.08)",
-                      color: "#f87171",
+                      border: "1px solid rgba(239,68,68,0.3)",
+                      background: "rgba(239,68,68,0.08)",
+                      color: "#ef4444",
                       fontSize: 13,
                       fontWeight: 600,
                       cursor: "pointer",

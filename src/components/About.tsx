@@ -12,7 +12,7 @@ export default function About() {
   ];
 
   return (
-    <section style={{ padding: "0px 24px" }}>
+    <section aria-label="À propos" style={{ padding: "0px 24px" }}>
       <div
         ref={ref}
         style={{
@@ -46,11 +46,12 @@ export default function About() {
             color: "#fff",
             flexShrink: 0,
           }}
+          aria-hidden="true"
         >
           YF
         </div>
         <div style={{ flex: 1, minWidth: 280 }}>
-          <h3
+          <h2
             style={{
               color: "var(--text)",
               fontSize: 23,
@@ -59,7 +60,7 @@ export default function About() {
             }}
           >
             Yannick Franchaisse
-          </h3>
+          </h2>
           <p
             style={{
               color: "var(--blue)",

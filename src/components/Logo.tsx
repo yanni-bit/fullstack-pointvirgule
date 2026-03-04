@@ -4,7 +4,8 @@ export default function Logo({ size = 36 }: { size?: number }) {
   return (
     <Image
       src="/images/logo.png"
-      alt="Fullstack Point-Virgule"
+      alt=""
+      aria-hidden="true"
       width={size}
       height={size}
     />
