@@ -28,8 +28,8 @@ export default function ProjectLayout({ desc, sidebar }: ProjectLayoutProps) {
           marginBottom: 24,
         }}
       >
-        {sidebar}
-        {desc}
+        <div key="sidebar">{sidebar}</div>
+        <div key="desc">{desc}</div>
       </div>
     );
   }
@@ -45,8 +45,8 @@ export default function ProjectLayout({ desc, sidebar }: ProjectLayoutProps) {
         marginBottom: 24,
       }}
     >
-      {desc}
-      {sidebar}
+      <div key="desc">{desc}</div>
+      <div key="sidebar">{sidebar}</div>
     </div>
   );
 }
