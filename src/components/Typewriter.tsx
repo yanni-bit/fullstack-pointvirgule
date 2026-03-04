@@ -29,7 +29,7 @@ export default function Typewriter() {
           }
         }
       },
-      isDeleting ? 35 : 75
+      isDeleting ? 35 : 75,
     );
     return () => clearTimeout(timeout);
   }, [text, isDeleting, index]);

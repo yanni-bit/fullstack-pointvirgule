@@ -3,7 +3,13 @@
 import useInView from "./useInView";
 import { SERVICES } from "../data/siteData";
 
-function ServiceCard({ service, index }: { service: typeof SERVICES[number]; index: number }) {
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: (typeof SERVICES)[number];
+  index: number;
+}) {
   const { ref, visible } = useInView();
 
   return (
@@ -18,6 +24,8 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[number]; ind
         transform: visible ? "translateY(0)" : "translateY(20px)",
         transition: `all 0.55s ease ${index * 0.1}s`,
         cursor: "default",
+        display: "flex",
+        flexDirection: "column",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "var(--border-h)";
@@ -29,19 +37,55 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[number]; ind
       }}
     >
       <div style={{ fontSize: 34, marginBottom: 14 }}>{service.icon}</div>
-      <h3 style={{ color: "#fff", fontSize: 19, fontWeight: 700, marginBottom: 10 }}>
+      <h3
+        style={{
+          color: "var(--text)",
+          fontSize: 19,
+          fontWeight: 700,
+          marginBottom: 10,
+        }}
+      >
         {service.title}
       </h3>
-      <p style={{ color: "var(--text2)", fontSize: 14.5, lineHeight: 1.7, marginBottom: 18 }}>
+      <p
+        style={{
+          color: "var(--text2)",
+          fontSize: 14.5,
+          lineHeight: 1.7,
+          marginBottom: 14,
+        }}
+      >
         {service.desc}
       </p>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+
+      {/* Bénéfice client */}
+      {"benefit" in service && service.benefit && (
+        <p
+          style={{
+            color: "var(--blue)",
+            fontSize: 13,
+            lineHeight: 1.6,
+            marginBottom: 18,
+            padding: "10px 14px",
+            background: "rgba(33,150,243,0.06)",
+            borderRadius: 8,
+            borderLeft: "3px solid var(--blue)",
+            fontStyle: "italic",
+          }}
+        >
+          {service.benefit}
+        </p>
+      )}
+
+      <div
+        style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: "auto" }}
+      >
         {service.techs.map((t) => (
           <span
             key={t}
             style={{
               background: "rgba(33,150,243,0.08)",
-              color: "#64B5F6",
+              color: "var(--blue)",
               padding: "4px 11px",
               borderRadius: 6,
               fontSize: 11.5,
@@ -90,7 +134,7 @@ export default function Services() {
             style={{
               fontSize: "clamp(28px, 4vw, 44px)",
               fontWeight: 800,
-              color: "#fff",
+              color: "var(--text)",
               letterSpacing: "-0.02em",
             }}
           >

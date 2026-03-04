@@ -18,7 +18,13 @@ type DisplayProject = {
   fromDB?: boolean;
 };
 
-function ProjectCard({ project, index }: { project: DisplayProject; index: number }) {
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: DisplayProject;
+  index: number;
+}) {
   const { ref, visible } = useInView();
 
   const cardContent = (
@@ -37,7 +43,7 @@ function ProjectCard({ project, index }: { project: DisplayProject; index: numbe
         display: "block",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
+        e.currentTarget.style.borderColor = "var(--border-h)";
         e.currentTarget.style.transform = "translateY(-4px)";
       }}
       onMouseLeave={(e) => {
@@ -51,9 +57,14 @@ function ProjectCard({ project, index }: { project: DisplayProject; index: numbe
           background: `linear-gradient(90deg, ${project.color}, ${project.color}66)`,
         }}
       />
-
       <div style={{ padding: "28px 28px 24px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <span
             style={{
               color: project.color,
@@ -66,36 +77,60 @@ function ProjectCard({ project, index }: { project: DisplayProject; index: numbe
             {project.tag}
           </span>
           {project.slug && (
-            <span style={{ color: "var(--text3)", fontSize: 12 }}>Voir le détail →</span>
+            <span style={{ color: "var(--text3)", fontSize: 12 }}>
+              Voir le détail →
+            </span>
           )}
         </div>
-        <h3 style={{ color: "#fff", fontSize: 23, fontWeight: 800, margin: "4px 0 14px" }}>
+        <h3
+          style={{
+            color: "var(--text)",
+            fontSize: 23,
+            fontWeight: 800,
+            margin: "4px 0 14px",
+          }}
+        >
           {project.title}
         </h3>
-        <p style={{ color: "var(--text2)", fontSize: 14.5, lineHeight: 1.7, marginBottom: 22 }}>
+        <p
+          style={{
+            color: "var(--text2)",
+            fontSize: 14.5,
+            lineHeight: 1.7,
+            marginBottom: 22,
+          }}
+        >
           {project.desc}
         </p>
-
         <div style={{ display: "flex", gap: 12, marginBottom: 20 }}>
           {project.metrics.map((m) => (
             <div
               key={m.label}
               style={{
                 flex: 1,
-                background: "rgba(255,255,255,0.025)",
+                background: "var(--surface)",
                 borderRadius: 10,
                 padding: 12,
                 textAlign: "center",
+                border: "1px solid var(--border)",
               }}
             >
-              <strong style={{ display: "block", color: "#fff", fontSize: 17, fontWeight: 800 }}>
+              <strong
+                style={{
+                  display: "block",
+                  color: "var(--text)",
+                  fontSize: 17,
+                  fontWeight: 800,
+                }}
+              >
                 {m.value}
               </strong>
-              <small style={{ color: "var(--text3)", fontSize: 11 }}>{m.label}</small>
+              <small style={{ color: "var(--text3)", fontSize: 11 }}>
+                {m.label}
+              </small>
             </div>
           ))}
         </div>
-
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {project.techs.map((t) => (
             <span
@@ -121,16 +156,25 @@ function ProjectCard({ project, index }: { project: DisplayProject; index: numbe
 
   if (project.slug) {
     return (
-      <Link href={`/portfolio/${project.slug}`} style={{ textDecoration: "none" }}>
+      <Link
+        href={`/portfolio/${project.slug}`}
+        style={{ textDecoration: "none" }}
+      >
         {cardContent}
       </Link>
     );
   }
-
   return cardContent;
 }
 
-const COLORS = ["#F59E0B", "#8B5CF6", "#10B981", "#2196F3", "#EC4899", "#F97316"];
+const COLORS = [
+  "#F59E0B",
+  "#8B5CF6",
+  "#10B981",
+  "#2196F3",
+  "#EC4899",
+  "#F97316",
+];
 
 function dbProjectToDisplay(p: Project, index: number): DisplayProject {
   let metrics: { label: string; value: string }[] = [];
@@ -140,7 +184,6 @@ function dbProjectToDisplay(p: Project, index: number): DisplayProject {
       return { label: label?.trim() || "", value: value?.trim() || "" };
     });
   } catch {}
-
   return {
     id: p.id,
     slug: p.slug,
@@ -164,9 +207,10 @@ export default function Portfolio() {
       .select("*")
       .order("order_index", { ascending: true })
       .then(({ data }) => {
-        if (data && data.length > 0) {
-          setDbProjects(data.map((p, i) => dbProjectToDisplay(p as Project, i)));
-        }
+        if (data && data.length > 0)
+          setDbProjects(
+            data.map((p, i) => dbProjectToDisplay(p as Project, i)),
+          );
       });
   }, []);
 
@@ -176,7 +220,6 @@ export default function Portfolio() {
     desc: p.desc,
     techs: p.techs,
   }));
-
   const allProjects = dbProjects.length > 0 ? dbProjects : staticProjects;
 
   return (
@@ -209,7 +252,7 @@ export default function Portfolio() {
             style={{
               fontSize: "clamp(28px, 4vw, 44px)",
               fontWeight: 800,
-              color: "#fff",
+              color: "var(--text)",
               letterSpacing: "-0.02em",
             }}
           >

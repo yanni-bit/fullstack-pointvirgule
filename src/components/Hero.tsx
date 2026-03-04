@@ -28,7 +28,8 @@ export default function Hero() {
           left: "5%",
           width: 600,
           height: 600,
-          background: "radial-gradient(circle, rgba(33,150,243,0.07) 0%, transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(33,150,243,0.07) 0%, transparent 70%)",
           borderRadius: "50%",
           filter: "blur(80px)",
           animation: "float 8s ease-in-out infinite",
@@ -42,7 +43,8 @@ export default function Hero() {
           right: 0,
           width: 500,
           height: 500,
-          background: "radial-gradient(circle, rgba(21,101,192,0.05) 0%, transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(21,101,192,0.05) 0%, transparent 70%)",
           borderRadius: "50%",
           filter: "blur(80px)",
           animation: "float 10s ease-in-out infinite 2s",
@@ -56,14 +58,16 @@ export default function Hero() {
           position: "absolute",
           inset: 0,
           opacity: 0.025,
-          backgroundImage: "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
+          backgroundImage:
+            "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
           backgroundSize: "64px 64px",
-          WebkitMaskImage: "radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent)",
-          maskImage: "radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent)",
+          maskImage:
+            "radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent)",
         }}
       />
 
-      {/* Content */}
       <div
         style={{
           maxWidth: 820,
@@ -90,7 +94,7 @@ export default function Hero() {
             marginBottom: 28,
           }}
         >
-          D&#201;VELOPPEUR WEB FULLSTACK FREELANCE
+          DÉVELOPPEUR WEB FULLSTACK FREELANCE
         </span>
 
         <h1
@@ -98,7 +102,7 @@ export default function Hero() {
             fontSize: "clamp(38px, 6.5vw, 68px)",
             fontWeight: 900,
             lineHeight: 1.08,
-            color: "#fff",
+            color: "var(--text)",
             marginBottom: 20,
             letterSpacing: "-0.03em",
           }}
@@ -125,10 +129,11 @@ export default function Hero() {
             margin: "0 auto 12px",
           }}
         >
-          15+ ans de commerce, maintenant d&#233;veloppeur fullstack.
+          15+ ans de commerce, maintenant développeur fullstack.
           <br />
-          Je comprends vos enjeux m&#233;tier{" "}
-          <strong style={{ color: "var(--text)" }}>et</strong> je code vos solutions.
+          Je comprends vos enjeux métier{" "}
+          <strong style={{ color: "var(--text)" }}>et</strong> je code vos
+          solutions.
         </p>
 
         <p
@@ -140,7 +145,8 @@ export default function Hero() {
             letterSpacing: "0.02em",
           }}
         >
-          Technologies modernes &#183; Code sur mesure &#183; Z&#233;ro abonnement &#183; Propri&#233;t&#233; totale
+          Technologies modernes · Code sur mesure · Zéro abonnement · Propriété
+          totale
         </p>
 
         <div
@@ -174,8 +180,8 @@ export default function Hero() {
               padding: "13px 28px",
               borderRadius: 10,
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.12)",
-              color: "#fff",
+              border: "1px solid var(--border)",
+              color: "var(--text)",
               fontSize: 15,
               fontWeight: 600,
               textDecoration: "none",
@@ -196,8 +202,9 @@ export default function Hero() {
             marginLeft: "auto",
             marginRight: "auto",
             textAlign: "left",
-            background: "rgba(13,13,24,0.9)",
-            boxShadow: "0 24px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)",
+            background: "var(--bg2)",
+            boxShadow:
+              "0 24px 80px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)",
           }}
         >
           <div
@@ -207,12 +214,33 @@ export default function Hero() {
               alignItems: "center",
               padding: "11px 16px",
               borderBottom: "1px solid var(--border)",
-              background: "rgba(255,255,255,0.015)",
+              background: "var(--surface)",
             }}
           >
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ef4444" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#f59e0b" }} />
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#22c55e" }} />
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                background: "#ef4444",
+              }}
+            />
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                background: "#f59e0b",
+              }}
+            />
+            <span
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                background: "#22c55e",
+              }}
+            />
             <span
               style={{
                 flex: 1,
@@ -234,20 +262,21 @@ export default function Hero() {
             }}
           >
             <div>
-              <span style={{ color: "var(--green)" }}>&#10132;</span>{" "}
-              <span style={{ color: "#64B5F6" }}>~</span> npx create-next-app@latest mon-projet
+              <span style={{ color: "var(--green)" }}>➜</span>{" "}
+              <span style={{ color: "var(--blue)" }}>~</span> npx
+              create-next-app@latest mon-projet
             </div>
             <div style={{ color: "var(--text3)" }}>
-              &#10004; TypeScript? <span style={{ color: "var(--green)" }}>Yes</span>
+              ✔ TypeScript? <span style={{ color: "var(--green)" }}>Yes</span>
             </div>
             <div style={{ color: "var(--text3)" }}>
-              &#10004; Tailwind CSS? <span style={{ color: "var(--green)" }}>Yes</span>
+              ✔ Tailwind CSS? <span style={{ color: "var(--green)" }}>Yes</span>
             </div>
             <div style={{ color: "var(--text3)" }}>
-              &#10004; App Router? <span style={{ color: "var(--green)" }}>Yes</span>
+              ✔ App Router? <span style={{ color: "var(--green)" }}>Yes</span>
             </div>
             <div style={{ color: "var(--green)", marginTop: 6 }}>
-              &#128640; Votre projet est pr&#234;t !
+              🚀 Votre projet est prêt !
             </div>
           </div>
         </div>

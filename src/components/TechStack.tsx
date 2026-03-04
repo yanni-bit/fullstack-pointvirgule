@@ -36,11 +36,11 @@ export default function TechStack() {
             style={{
               fontSize: "clamp(24px, 3.5vw, 36px)",
               fontWeight: 800,
-              color: "#fff",
+              color: "var(--text)",
               letterSpacing: "-0.02em",
             }}
           >
-            Technologies ma&#238;tris&#233;es
+            Technologies maîtrisées
           </h2>
         </div>
         <div
@@ -78,7 +78,7 @@ export default function TechStack() {
                   <span
                     key={item}
                     style={{
-                      background: "rgba(255,255,255,0.04)",
+                      background: "var(--surface)",
                       color: "var(--text)",
                       padding: "7px 15px",
                       borderRadius: 8,

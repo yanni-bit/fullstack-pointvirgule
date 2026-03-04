@@ -4,7 +4,6 @@ export default function Footer() {
   const links = [
     { label: "GitHub", href: "https://github.com/yanni-bit" },
     { label: "Codeur.com", href: "https://www.codeur.com" },
-    { label: "Malt", href: "https://www.malt.fr" },
   ];
 
   return (

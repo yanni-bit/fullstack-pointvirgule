@@ -8,7 +8,11 @@ interface ImageGalleryProps {
   accentColor?: string;
 }
 
-export default function ImageGallery({ images, projectTitle, accentColor = "#2196F3" }: ImageGalleryProps) {
+export default function ImageGallery({
+  images,
+  projectTitle,
+  accentColor = "#2196F3",
+}: ImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const openModal = (i: number) => setActiveIndex(i);
@@ -38,7 +42,9 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
   // Bloquer le scroll body quand modal ouvert
   useEffect(() => {
     document.body.style.overflow = activeIndex !== null ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [activeIndex]);
 
   if (!images || images.length === 0) return null;
@@ -46,7 +52,14 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
   return (
     <>
       <div style={{ marginTop: 40 }}>
-        <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 20 }}>
+        <h2
+          style={{
+            color: "#fff",
+            fontSize: 20,
+            fontWeight: 700,
+            marginBottom: 20,
+          }}
+        >
           Galerie
         </h2>
         <div
@@ -70,17 +83,22 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
                 position: "relative",
                 aspectRatio: "16/10",
                 background: "var(--surface)",
-                transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
+                transition:
+                  "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
               }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.transform = "scale(1.03)";
-                (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 32px ${accentColor}30`;
-                (e.currentTarget as HTMLElement).style.borderColor = `${accentColor}60`;
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.transform =
+                  "scale(1.03)";
+                (e.currentTarget as HTMLElement).style.boxShadow =
+                  `0 8px 32px ${accentColor}30`;
+                (e.currentTarget as HTMLElement).style.borderColor =
+                  `${accentColor}60`;
               }}
-              onMouseLeave={e => {
+              onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.transform = "scale(1)";
                 (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+                (e.currentTarget as HTMLElement).style.borderColor =
+                  "var(--border)";
               }}
               aria-label={`Voir ${projectTitle} image ${i + 1}`}
             >
@@ -133,7 +151,7 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
         >
           {/* Conteneur image */}
           <div
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative",
               maxWidth: "90vw",
@@ -197,13 +215,16 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
               border: "1px solid rgba(255,255,255,0.12)",
               transition: "background 0.2s, color 0.2s",
             }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.16)";
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background =
+                "rgba(255,255,255,0.16)";
               (e.currentTarget as HTMLElement).style.color = "#fff";
             }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
-              (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.7)";
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background =
+                "rgba(255,255,255,0.08)";
+              (e.currentTarget as HTMLElement).style.color =
+                "rgba(255,255,255,0.7)";
             }}
             aria-label="Fermer"
           >
@@ -214,7 +235,10 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
           {images.length > 1 && (
             <>
               <button
-                onClick={e => { e.stopPropagation(); prev(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prev();
+                }}
                 style={{
                   all: "unset",
                   cursor: "pointer",
@@ -234,15 +258,20 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
                   border: "1px solid rgba(255,255,255,0.12)",
                   transition: "background 0.2s, color 0.2s",
                 }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = `${accentColor}40`;
-                  (e.currentTarget as HTMLElement).style.borderColor = accentColor;
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background =
+                    `${accentColor}40`;
+                  (e.currentTarget as HTMLElement).style.borderColor =
+                    accentColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)";
-                  (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.8)";
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background =
+                    "rgba(255,255,255,0.08)";
+                  (e.currentTarget as HTMLElement).style.borderColor =
+                    "rgba(255,255,255,0.12)";
+                  (e.currentTarget as HTMLElement).style.color =
+                    "rgba(255,255,255,0.8)";
                 }}
                 aria-label="Image précédente"
               >
@@ -250,7 +279,10 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
               </button>
 
               <button
-                onClick={e => { e.stopPropagation(); next(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  next();
+                }}
                 style={{
                   all: "unset",
                   cursor: "pointer",
@@ -270,15 +302,20 @@ export default function ImageGallery({ images, projectTitle, accentColor = "#219
                   border: "1px solid rgba(255,255,255,0.12)",
                   transition: "background 0.2s, color 0.2s",
                 }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = `${accentColor}40`;
-                  (e.currentTarget as HTMLElement).style.borderColor = accentColor;
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background =
+                    `${accentColor}40`;
+                  (e.currentTarget as HTMLElement).style.borderColor =
+                    accentColor;
                   (e.currentTarget as HTMLElement).style.color = "#fff";
                 }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)";
-                  (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.8)";
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background =
+                    "rgba(255,255,255,0.08)";
+                  (e.currentTarget as HTMLElement).style.borderColor =
+                    "rgba(255,255,255,0.12)";
+                  (e.currentTarget as HTMLElement).style.color =
+                    "rgba(255,255,255,0.8)";
                 }}
                 aria-label="Image suivante"
               >

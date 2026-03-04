@@ -3,11 +3,20 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("accueil");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -39,7 +48,7 @@ export default function Nav() {
         padding: "0 28px",
         transition: "all 0.3s ease",
         backdropFilter: "blur(24px)",
-        background: "rgba(7,7,14,0.92)",
+        background: "var(--bg2)",
         borderBottom: "1px solid var(--border)",
       }
     : {
@@ -94,7 +103,6 @@ export default function Nav() {
     transition: "transform 0.2s",
     marginLeft: "8px",
   };
-
   const waMobileStyle: React.CSSProperties = {
     background: "linear-gradient(135deg, #25D366, #128C7E)",
     color: "#fff",
@@ -120,7 +128,6 @@ export default function Nav() {
           height: 72,
         }}
       >
-        {/* Brand */}
         <Link
           href="#accueil"
           style={{
@@ -133,53 +140,56 @@ export default function Nav() {
           <Logo size={42} />
           <span style={{ fontSize: 19, fontWeight: 700, color: "var(--blue)" }}>
             Fullstack{" "}
-            <span style={{ color: "#fff" }}>Point-Virgule</span>
+            <span style={{ color: "var(--text)" }}>Point-Virgule</span>
           </span>
         </Link>
 
-        {/* Desktop links */}
-        <div className="hidden md:flex" style={{ gap: 4, alignItems: "center" }}>
-          {links.map((s) => (
-            <Link key={s} href={`#${s}`} style={getLinkStyle(s)}>
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+        {!isMobile && (
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+            {links.map((s) => (
+              <Link key={s} href={`#${s}`} style={getLinkStyle(s)}>
+                {s.charAt(0).toUpperCase() + s.slice(1)}
+              </Link>
+            ))}
+            <ThemeToggle />
+            <Link
+              href="https://wa.me/33650148605"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={waStyle}
+            >
+              💬 WhatsApp
             </Link>
-          ))}
-          <Link
-            href="https://wa.me/33650148605"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={waStyle}
-          >
-            💬 WhatsApp
-          </Link>
-        </div>
+          </div>
+        )}
 
-        {/* Burger button */}
-        <button
-          className="md:hidden"
-          onClick={() => setOpen(!open)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#fff",
-            fontSize: 26,
-            cursor: "pointer",
-          }}
-        >
-          {open ? "✕" : "☰"}
-        </button>
+        {isMobile && (
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <ThemeToggle />
+            <button
+              onClick={() => setOpen(!open)}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--text)",
+                fontSize: 26,
+                cursor: "pointer",
+              }}
+            >
+              {open ? "✕" : "☰"}
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Mobile menu */}
-      {open && (
+      {isMobile && open && (
         <div
-          className="md:hidden"
           style={{
             display: "flex",
             flexDirection: "column",
             gap: 4,
             padding: "12px 20px 24px",
-            background: "rgba(7,7,14,0.98)",
+            background: "var(--bg2)",
           }}
         >
           {links.map((s) => (

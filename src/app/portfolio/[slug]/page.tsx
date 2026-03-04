@@ -7,7 +7,7 @@ import ImageGallery from "../../../components/ImageGallery";
 async function getProject(slug: string): Promise<Project | null> {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY!
+    process.env.SUPABASE_SECRET_KEY!,
   );
   const { data } = await supabase
     .from("projects")
@@ -17,25 +17,47 @@ async function getProject(slug: string): Promise<Project | null> {
   return data as Project | null;
 }
 
-const COLORS = ["#F59E0B", "#8B5CF6", "#10B981", "#2196F3", "#EC4899", "#F97316"];
+const COLORS = [
+  "#F59E0B",
+  "#8B5CF6",
+  "#10B981",
+  "#2196F3",
+  "#EC4899",
+  "#F97316",
+];
 
-export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) notFound();
 
-  const colorIndex = project.slug.split("").reduce((acc: number, c: string) => acc + c.charCodeAt(0), 0) % COLORS.length;
+  const colorIndex =
+    project.slug
+      .split("")
+      .reduce((acc: number, c: string) => acc + c.charCodeAt(0), 0) %
+    COLORS.length;
   const color = COLORS[colorIndex];
 
-  const metrics: { label: string; value: string }[] = (project.metrics || []).map((m: string) => {
+  const metrics: { label: string; value: string }[] = (
+    project.metrics || []
+  ).map((m: string) => {
     const [label, value] = m.split(":");
     return { label: label?.trim() || "", value: value?.trim() || "" };
   });
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)", padding: "100px 24px 60px" }}>
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "var(--bg)",
+        padding: "100px 24px 60px",
+      }}
+    >
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
-
         {/* Retour */}
         <Link
           href="/#portfolio"
@@ -70,7 +92,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             style={{
               fontSize: "clamp(32px, 5vw, 56px)",
               fontWeight: 800,
-              color: "#fff",
+              color: "var(--text)",
               letterSpacing: "-0.02em",
               margin: "8px 0 16px",
             }}
@@ -123,10 +145,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                   textAlign: "center",
                 }}
               >
-                <strong style={{ display: "block", color: "#fff", fontSize: 24, fontWeight: 800 }}>
+                <strong
+                  style={{
+                    display: "block",
+                    color: "var(--text)",
+                    fontSize: 24,
+                    fontWeight: 800,
+                  }}
+                >
                   {m.value}
                 </strong>
-                <small style={{ color: "var(--text3)", fontSize: 12 }}>{m.label}</small>
+                <small style={{ color: "var(--text3)", fontSize: 12 }}>
+                  {m.label}
+                </small>
               </div>
             ))}
           </div>
@@ -150,7 +181,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               padding: 32,
             }}
           >
-            <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 16 }}>
+            <h2
+              style={{
+                color: "var(--text)",
+                fontSize: 20,
+                fontWeight: 700,
+                marginBottom: 16,
+              }}
+            >
               À propos du projet
             </h2>
             <div
@@ -167,7 +205,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
           {/* Sidebar */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-
             {/* Infos */}
             <div
               style={{
@@ -177,19 +214,46 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 padding: 24,
               }}
             >
-              <h3 style={{ color: "#fff", fontSize: 14, fontWeight: 700, marginBottom: 16 }}>
+              <h3
+                style={{
+                  color: "var(--text)",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  marginBottom: 16,
+                }}
+              >
                 Informations
               </h3>
               {project.client && (
                 <div style={{ marginBottom: 12 }}>
-                  <small style={{ color: "var(--text3)", fontSize: 12 }}>Client</small>
-                  <p style={{ color: "#fff", fontSize: 14, margin: "2px 0 0" }}>{project.client}</p>
+                  <small style={{ color: "var(--text3)", fontSize: 12 }}>
+                    Client
+                  </small>
+                  <p
+                    style={{
+                      color: "var(--text)",
+                      fontSize: 14,
+                      margin: "2px 0 0",
+                    }}
+                  >
+                    {project.client}
+                  </p>
                 </div>
               )}
               {project.date && (
                 <div style={{ marginBottom: 12 }}>
-                  <small style={{ color: "var(--text3)", fontSize: 12 }}>Date</small>
-                  <p style={{ color: "#fff", fontSize: 14, margin: "2px 0 0" }}>{project.date}</p>
+                  <small style={{ color: "var(--text3)", fontSize: 12 }}>
+                    Date
+                  </small>
+                  <p
+                    style={{
+                      color: "var(--text)",
+                      fontSize: 14,
+                      margin: "2px 0 0",
+                    }}
+                  >
+                    {project.date}
+                  </p>
                 </div>
               )}
             </div>
@@ -204,7 +268,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                   padding: 24,
                 }}
               >
-                <h3 style={{ color: "#fff", fontSize: 14, fontWeight: 700, marginBottom: 14 }}>
+                <h3
+                  style={{
+                    color: "var(--text)",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    marginBottom: 14,
+                  }}
+                >
                   Stack technique
                 </h3>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -252,8 +323,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                       textAlign: "center",
                       padding: "12px 16px",
                       borderRadius: 10,
-                      background: "linear-gradient(135deg, var(--blue), var(--blue-d))",
-                      color: "#fff",
+                      background:
+                        "linear-gradient(135deg, var(--blue), var(--blue-d))",
+                      color: "var(--text)",
                       textDecoration: "none",
                       fontSize: 14,
                       fontWeight: 700,
@@ -272,9 +344,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                       textAlign: "center",
                       padding: "12px 16px",
                       borderRadius: 10,
-                      background: "rgba(255,255,255,0.05)",
+                      background: "var(--surface)",
                       border: "1px solid var(--border)",
-                      color: "#fff",
+                      color: "var(--text)",
                       textDecoration: "none",
                       fontSize: 14,
                       fontWeight: 700,
@@ -294,7 +366,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           projectTitle={project.title}
           accentColor={color}
         />
-
       </div>
     </main>
   );

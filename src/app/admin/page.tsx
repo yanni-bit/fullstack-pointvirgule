@@ -50,7 +50,7 @@ function getSupabase() {
   if (!supabaseInstance) {
     supabaseInstance = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     );
   }
   return supabaseInstance;
@@ -214,12 +214,20 @@ export default function AdminPage() {
 
     const payload = {
       ...form,
-      tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
-      metrics: form.metrics.split("\n").map((m) => m.trim()).filter(Boolean),
+      tags: form.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+      metrics: form.metrics
+        .split("\n")
+        .map((m) => m.trim())
+        .filter(Boolean),
       images: galleryImages,
     };
 
-    const url = editingId ? `/api/admin/projects/${editingId}` : "/api/projects";
+    const url = editingId
+      ? `/api/admin/projects/${editingId}`
+      : "/api/projects";
     const method = editingId ? "PUT" : "POST";
 
     const res = await fetch(url, {
@@ -246,7 +254,8 @@ export default function AdminPage() {
   }
 
   async function handleDelete(id: string, title: string) {
-    if (!confirm(`Supprimer "${title}" ? Cette action est irréversible.`)) return;
+    if (!confirm(`Supprimer "${title}" ? Cette action est irréversible.`))
+      return;
     const res = await fetch(`/api/admin/projects/${id}`, {
       method: "DELETE",
       headers: { "x-admin-password": password },
@@ -279,7 +288,14 @@ export default function AdminPage() {
             maxWidth: 400,
           }}
         >
-          <h1 style={{ color: "#fff", fontSize: 24, fontWeight: 800, marginBottom: 8 }}>
+          <h1
+            style={{
+              color: "#fff",
+              fontSize: 24,
+              fontWeight: 800,
+              marginBottom: 8,
+            }}
+          >
             Administration
           </h1>
           <p style={{ color: "var(--text3)", fontSize: 14, marginBottom: 24 }}>
@@ -294,7 +310,9 @@ export default function AdminPage() {
             style={{ ...inputStyle, marginBottom: 12 }}
           />
           {authError && (
-            <p style={{ color: "#f87171", fontSize: 13, marginBottom: 12 }}>{authError}</p>
+            <p style={{ color: "#f87171", fontSize: 13, marginBottom: 12 }}>
+              {authError}
+            </p>
           )}
           <button
             onClick={handleLogin}
@@ -318,9 +336,14 @@ export default function AdminPage() {
   }
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)", padding: "40px 24px" }}>
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "var(--bg)",
+        padding: "40px 24px",
+      }}
+    >
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
-
         {/* Header */}
         <div
           style={{
@@ -331,7 +354,9 @@ export default function AdminPage() {
           }}
         >
           <div>
-            <h1 style={{ color: "#fff", fontSize: 28, fontWeight: 800 }}>Administration</h1>
+            <h1 style={{ color: "#fff", fontSize: 28, fontWeight: 800 }}>
+              Administration
+            </h1>
             <p style={{ color: "var(--text3)", fontSize: 14 }}>
               {projects.length} réalisation{projects.length > 1 ? "s" : ""}
             </p>
@@ -392,7 +417,12 @@ export default function AdminPage() {
                 {editingId ? "Modifier la réalisation" : "Nouvelle réalisation"}
               </h2>
               <button
-                onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm); setGalleryImages([]); }}
+                onClick={() => {
+                  setShowForm(false);
+                  setEditingId(null);
+                  setForm(emptyForm);
+                  setGalleryImages([]);
+                }}
                 style={{
                   background: "none",
                   border: "1px solid var(--border)",
@@ -407,7 +437,13 @@ export default function AdminPage() {
               </button>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 16,
+              }}
+            >
               <div>
                 <label style={labelStyle}>Titre *</label>
                 <input
@@ -429,7 +465,9 @@ export default function AdminPage() {
                 <input
                   style={inputStyle}
                   value={form.slug}
-                  onChange={(e) => setForm((f) => ({ ...f, slug: slugify(e.target.value) }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, slug: slugify(e.target.value) }))
+                  }
                   placeholder="tresors-dambre"
                 />
               </div>
@@ -438,16 +476,24 @@ export default function AdminPage() {
                 <input
                   style={inputStyle}
                   value={form.short_desc}
-                  onChange={(e) => setForm((f) => ({ ...f, short_desc: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, short_desc: e.target.value }))
+                  }
                   placeholder="Migration Shopify → Saleor headless..."
                 />
               </div>
               <div style={{ gridColumn: "1 / -1" }}>
                 <label style={labelStyle}>Description longue</label>
                 <textarea
-                  style={{ ...inputStyle, minHeight: 140, resize: "vertical" as const }}
+                  style={{
+                    ...inputStyle,
+                    minHeight: 140,
+                    resize: "vertical" as const,
+                  }}
                   value={form.long_desc}
-                  onChange={(e) => setForm((f) => ({ ...f, long_desc: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, long_desc: e.target.value }))
+                  }
                   placeholder="Description détaillée du projet, contexte, enjeux, solutions apportées..."
                 />
               </div>
@@ -456,25 +502,39 @@ export default function AdminPage() {
                 <input
                   style={inputStyle}
                   value={form.cover_url}
-                  onChange={(e) => setForm((f) => ({ ...f, cover_url: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, cover_url: e.target.value }))
+                  }
                   placeholder="https://..."
                 />
               </div>
               <div>
-                <label style={labelStyle}>Tags / Stack (séparés par des virgules)</label>
+                <label style={labelStyle}>
+                  Tags / Stack (séparés par des virgules)
+                </label>
                 <input
                   style={inputStyle}
                   value={form.tags}
-                  onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, tags: e.target.value }))
+                  }
                   placeholder="Next.js, TypeScript, PostgreSQL"
                 />
               </div>
               <div>
-                <label style={labelStyle}>Métriques (une par ligne : Label:Valeur)</label>
+                <label style={labelStyle}>
+                  Métriques (une par ligne : Label:Valeur)
+                </label>
                 <textarea
-                  style={{ ...inputStyle, minHeight: 90, resize: "vertical" as const }}
+                  style={{
+                    ...inputStyle,
+                    minHeight: 90,
+                    resize: "vertical" as const,
+                  }}
                   value={form.metrics}
-                  onChange={(e) => setForm((f) => ({ ...f, metrics: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, metrics: e.target.value }))
+                  }
                   placeholder={"Produits:750\nStack:Headless\nStatut:En cours"}
                 />
               </div>
@@ -483,7 +543,9 @@ export default function AdminPage() {
                 <input
                   style={inputStyle}
                   value={form.client}
-                  onChange={(e) => setForm((f) => ({ ...f, client: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, client: e.target.value }))
+                  }
                   placeholder="Nom du client"
                 />
               </div>
@@ -492,7 +554,9 @@ export default function AdminPage() {
                 <input
                   style={inputStyle}
                   value={form.date}
-                  onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, date: e.target.value }))
+                  }
                   placeholder="2025"
                 />
               </div>
@@ -501,7 +565,9 @@ export default function AdminPage() {
                 <input
                   style={inputStyle}
                   value={form.url}
-                  onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, url: e.target.value }))
+                  }
                   placeholder="https://monsite.fr"
                 />
               </div>
@@ -510,7 +576,9 @@ export default function AdminPage() {
                 <input
                   style={inputStyle}
                   value={form.github_url}
-                  onChange={(e) => setForm((f) => ({ ...f, github_url: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, github_url: e.target.value }))
+                  }
                   placeholder="https://github.com/..."
                 />
               </div>
@@ -520,18 +588,35 @@ export default function AdminPage() {
                   style={inputStyle}
                   type="number"
                   value={form.order_index}
-                  onChange={(e) => setForm((f) => ({ ...f, order_index: parseInt(e.target.value) || 0 }))}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      order_index: parseInt(e.target.value) || 0,
+                    }))
+                  }
                 />
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, paddingTop: 24 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  paddingTop: 24,
+                }}
+              >
                 <input
                   type="checkbox"
                   id="featured"
                   checked={form.featured}
-                  onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, featured: e.target.checked }))
+                  }
                   style={{ width: 16, height: 16, cursor: "pointer" }}
                 />
-                <label htmlFor="featured" style={{ ...labelStyle, margin: 0, cursor: "pointer" }}>
+                <label
+                  htmlFor="featured"
+                  style={{ ...labelStyle, margin: 0, cursor: "pointer" }}
+                >
                   Mettre en avant (featured)
                 </label>
               </div>
@@ -545,10 +630,23 @@ export default function AdminPage() {
                     marginBottom: 16,
                   }}
                 >
-                  <label style={{ ...labelStyle, fontSize: 14, color: "#fff", marginBottom: 4 }}>
+                  <label
+                    style={{
+                      ...labelStyle,
+                      fontSize: 14,
+                      color: "#fff",
+                      marginBottom: 4,
+                    }}
+                  >
                     Galerie de screenshots
                   </label>
-                  <p style={{ color: "var(--text3)", fontSize: 12, marginBottom: 16 }}>
+                  <p
+                    style={{
+                      color: "var(--text3)",
+                      fontSize: 12,
+                      marginBottom: 16,
+                    }}
+                  >
                     JPG, PNG, WebP — plusieurs fichiers acceptés simultanément
                   </p>
 
@@ -570,13 +668,17 @@ export default function AdminPage() {
                     }}
                     onMouseEnter={(e) => {
                       if (!uploadingImages) {
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(33,150,243,0.5)";
-                        (e.currentTarget as HTMLElement).style.background = "rgba(33,150,243,0.04)";
+                        (e.currentTarget as HTMLElement).style.borderColor =
+                          "rgba(33,150,243,0.5)";
+                        (e.currentTarget as HTMLElement).style.background =
+                          "rgba(33,150,243,0.04)";
                       }
                     }}
                     onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
-                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)";
+                      (e.currentTarget as HTMLElement).style.borderColor =
+                        "rgba(255,255,255,0.15)";
+                      (e.currentTarget as HTMLElement).style.background =
+                        "rgba(255,255,255,0.02)";
                     }}
                   >
                     <input
@@ -585,11 +687,21 @@ export default function AdminPage() {
                       multiple
                       disabled={uploadingImages}
                       style={{ display: "none" }}
-                      onChange={(e) => e.target.files && handleImageUpload(e.target.files)}
+                      onChange={(e) =>
+                        e.target.files && handleImageUpload(e.target.files)
+                      }
                     />
                     <span style={{ fontSize: 28 }}>🖼️</span>
-                    <span style={{ color: "var(--text2)", fontSize: 14, fontWeight: 600 }}>
-                      {uploadingImages ? "Upload en cours..." : "Cliquer pour ajouter des images"}
+                    <span
+                      style={{
+                        color: "var(--text2)",
+                        fontSize: 14,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {uploadingImages
+                        ? "Upload en cours..."
+                        : "Cliquer pour ajouter des images"}
                     </span>
                     <span style={{ color: "var(--text3)", fontSize: 12 }}>
                       Sélection multiple possible (Ctrl+clic)
@@ -600,13 +712,21 @@ export default function AdminPage() {
                 {/* Miniatures existantes */}
                 {galleryImages.length > 0 && (
                   <div>
-                    <p style={{ color: "var(--text3)", fontSize: 12, marginBottom: 10 }}>
-                      {galleryImages.length} image{galleryImages.length > 1 ? "s" : ""} dans la galerie
+                    <p
+                      style={{
+                        color: "var(--text3)",
+                        fontSize: 12,
+                        marginBottom: 10,
+                      }}
+                    >
+                      {galleryImages.length} image
+                      {galleryImages.length > 1 ? "s" : ""} dans la galerie
                     </p>
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                        gridTemplateColumns:
+                          "repeat(auto-fill, minmax(140px, 1fr))",
                         gap: 10,
                       }}
                     >
@@ -657,12 +777,18 @@ export default function AdminPage() {
                               transition: "background 0.15s, transform 0.15s",
                             }}
                             onMouseEnter={(e) => {
-                              (e.currentTarget as HTMLElement).style.background = "#ef4444";
-                              (e.currentTarget as HTMLElement).style.transform = "scale(1.15)";
+                              (
+                                e.currentTarget as HTMLElement
+                              ).style.background = "#ef4444";
+                              (e.currentTarget as HTMLElement).style.transform =
+                                "scale(1.15)";
                             }}
                             onMouseLeave={(e) => {
-                              (e.currentTarget as HTMLElement).style.background = "rgba(248,113,113,0.9)";
-                              (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+                              (
+                                e.currentTarget as HTMLElement
+                              ).style.background = "rgba(248,113,113,0.9)";
+                              (e.currentTarget as HTMLElement).style.transform =
+                                "scale(1)";
                             }}
                           >
                             ✕
@@ -674,7 +800,6 @@ export default function AdminPage() {
                 )}
               </div>
               {/* ── FIN GALERIE ── */}
-
             </div>
 
             <button
@@ -695,7 +820,11 @@ export default function AdminPage() {
                 cursor: loading ? "not-allowed" : "pointer",
               }}
             >
-              {loading ? "Enregistrement..." : editingId ? "Enregistrer les modifications" : "Créer la réalisation"}
+              {loading
+                ? "Enregistrement..."
+                : editingId
+                  ? "Enregistrer les modifications"
+                  : "Créer la réalisation"}
             </button>
           </div>
         )}
@@ -731,8 +860,12 @@ export default function AdminPage() {
                 }}
               >
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <h3 style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  >
+                    <h3
+                      style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}
+                    >
                       {project.title}
                     </h3>
                     {project.featured && (
@@ -760,11 +893,18 @@ export default function AdminPage() {
                           borderRadius: 4,
                         }}
                       >
-                        {project.images.length} photo{project.images.length > 1 ? "s" : ""}
+                        {project.images.length} photo
+                        {project.images.length > 1 ? "s" : ""}
                       </span>
                     )}
                   </div>
-                  <p style={{ color: "var(--text3)", fontSize: 13, marginTop: 2 }}>
+                  <p
+                    style={{
+                      color: "var(--text3)",
+                      fontSize: 13,
+                      marginTop: 2,
+                    }}
+                  >
                     /{project.slug} · {(project.tags || []).join(", ")}
                   </p>
                 </div>

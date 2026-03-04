@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* ── DARK MODE (défaut) ── */
 :root {
   --bg: #07070E;
   --bg2: #0D0D18;
@@ -15,6 +16,22 @@
   --radius: 14px;
 }
 
+/* ── LIGHT MODE ── */
+html[data-theme="light"] {
+  --bg: #F8FAFC;
+  --bg2: #F1F5F9;
+  --surface: rgba(0, 0, 0, 0.03);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-h: rgba(33, 150, 243, 0.4);
+  --blue: #1976D2;
+  --blue-d: #0D47A1;
+  --green: #16a34a;
+  --text: #0F172A;
+  --text2: #475569;
+  --text3: #94A3B8;
+  --radius: 14px;
+}
+
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--text);
@@ -22,7 +39,9 @@
   --font-mono: var(--font-jetbrains-mono);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -42,18 +61,33 @@ body {
   color: var(--text);
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* ── CURSOR BLINK ── */
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 /* ── FLOAT ── */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 /* ── FADE UP (scroll reveal) ── */

@@ -9,7 +9,6 @@ export default function Contact() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -18,11 +17,11 @@ export default function Contact() {
   });
 
   const inputStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.08)",
+    background: "var(--surface)",
+    border: "1px solid var(--border)",
     borderRadius: 10,
     padding: "14px 16px",
-    color: "#fff",
+    color: "var(--text)",
     fontSize: 14,
     fontFamily: "var(--font-sans)",
     outline: "none",
@@ -32,12 +31,10 @@ export default function Contact() {
 
   const handleSubmit = async () => {
     setError(null);
-
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setError("Veuillez remplir tous les champs obligatoires.");
       return;
     }
-
     setLoading(true);
     try {
       const res = await fetch("/api/contact", {
@@ -45,19 +42,17 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || "Erreur inconnue");
       }
-
       setSent(true);
     } catch (err: unknown) {
-      const message =
+      setError(
         err instanceof Error
           ? err.message
-          : "Erreur lors de l'envoi. Réessayez.";
-      setError(message);
+          : "Erreur lors de l'envoi. Réessayez.",
+      );
     } finally {
       setLoading(false);
     }
@@ -93,7 +88,7 @@ export default function Contact() {
             style={{
               fontSize: "clamp(28px, 4vw, 44px)",
               fontWeight: 800,
-              color: "#fff",
+              color: "var(--text)",
               letterSpacing: "-0.02em",
               marginBottom: 8,
             }}
@@ -143,7 +138,7 @@ export default function Contact() {
                   <strong
                     key={idx}
                     style={{
-                      color: "#fff",
+                      color: "var(--text)",
                       fontSize: 14,
                       textAlign: "center",
                       display: "block",
@@ -170,7 +165,7 @@ export default function Contact() {
               <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
               <h3
                 style={{
-                  color: "#fff",
+                  color: "var(--text)",
                   fontSize: 20,
                   fontWeight: 700,
                   marginBottom: 6,
@@ -206,7 +201,7 @@ export default function Contact() {
                 />
               </div>
               <input
-                placeholder="Sujet / Service souhaité"
+                placeholder="Votre service souhaité (e-commerce, vitrine, API...)"
                 style={inputStyle}
                 value={form.service}
                 onChange={(e) => setForm({ ...form, service: e.target.value })}
@@ -256,7 +251,7 @@ export default function Contact() {
                   transition: "all 0.2s",
                 }}
               >
-                {loading ? "Envoi en cours..." : "Envoyer le message"}
+                {loading ? "Envoi en cours..." : "On parle de votre projet ? →"}
               </button>
             </div>
           )}
