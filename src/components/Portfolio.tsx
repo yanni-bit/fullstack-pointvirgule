@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import useInView from "./useInView";
 import { PROJECTS } from "../data/siteData";
-import { supabase, type Project } from "../lib/supabase";
+import type { Project } from "../lib/types";
 
 type DisplayProject = {
   id?: string;
@@ -197,22 +197,12 @@ function dbProjectToDisplay(p: Project, index: number): DisplayProject {
   };
 }
 
-export default function Portfolio() {
-  const { ref, visible } = useInView();
-  const [dbProjects, setDbProjects] = useState<DisplayProject[]>([]);
+interface PortfolioProps {
+  initialProjects?: Project[];
+}
 
-  useEffect(() => {
-    supabase
-      .from("projects")
-      .select("*")
-      .order("order_index", { ascending: true })
-      .then(({ data }) => {
-        if (data && data.length > 0)
-          setDbProjects(
-            data.map((p, i) => dbProjectToDisplay(p as Project, i)),
-          );
-      });
-  }, []);
+export default function Portfolio({ initialProjects }: PortfolioProps) {
+  const { ref, visible } = useInView();
 
   const staticProjects: DisplayProject[] = PROJECTS.map((p) => ({
     ...p,
@@ -220,7 +210,11 @@ export default function Portfolio() {
     desc: p.desc,
     techs: p.techs,
   }));
-  const allProjects = dbProjects.length > 0 ? dbProjects : staticProjects;
+
+  const allProjects =
+    initialProjects && initialProjects.length > 0
+      ? initialProjects.map((p, i) => dbProjectToDisplay(p, i))
+      : staticProjects;
 
   return (
     <section id="portfolio" style={{ padding: "50px 24px" }}>

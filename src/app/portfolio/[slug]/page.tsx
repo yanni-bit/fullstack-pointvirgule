@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
-import type { Project } from "../../../lib/supabase";
+import type { Project } from "../../../lib/types";
 import ImageGallery from "../../../components/ImageGallery";
 import Nav from "../../../components/Nav";
 import ExpandableDesc from "../../../components/ExpandableDesc";

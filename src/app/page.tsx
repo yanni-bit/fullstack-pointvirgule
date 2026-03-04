@@ -6,15 +6,32 @@ import TechStack from "../components/TechStack";
 import About from "../components/About";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
+import { createPublicClient } from "../lib/supabase";
+import type { Project } from "../lib/types";
 
-export default function Home() {
+async function getProjects(): Promise<Project[]> {
+  try {
+    const supabase = createPublicClient();
+    const { data } = await supabase
+      .from("projects")
+      .select("*")
+      .order("order_index", { ascending: true });
+    return (data as Project[]) || [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function Home() {
+  const projects = await getProjects();
+
   return (
     <>
       <Nav />
       <main>
         <Hero />
         <Services />
-        <Portfolio />
+        <Portfolio initialProjects={projects} />
         <TechStack />
         <About />
         <Contact />

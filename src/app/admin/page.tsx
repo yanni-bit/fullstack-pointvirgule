@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
-import type { Project } from "../../lib/supabase";
+import type { Project } from "../../lib/types";
 
 type FormData = {
   title: string;
