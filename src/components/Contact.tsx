@@ -7,6 +7,15 @@ import { CONTACT_INFO } from "../data/siteData";
 export default function Contact() {
   const { ref, visible } = useInView();
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    service: "",
+    message: "",
+  });
 
   const inputStyle: React.CSSProperties = {
     background: "rgba(255,255,255,0.04)",
@@ -19,6 +28,39 @@ export default function Contact() {
     outline: "none",
     width: "100%",
     transition: "border-color 0.2s",
+  };
+
+  const handleSubmit = async () => {
+    setError(null);
+
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setError("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Erreur inconnue");
+      }
+
+      setSent(true);
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Erreur lors de l'envoi. Réessayez.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -149,37 +191,72 @@ export default function Contact() {
                   gap: 14,
                 }}
               >
-                <input placeholder="Nom" style={inputStyle} />
-                <input placeholder="Email" type="email" style={inputStyle} />
+                <input
+                  placeholder="Nom *"
+                  style={inputStyle}
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                />
+                <input
+                  placeholder="Email *"
+                  type="email"
+                  style={inputStyle}
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
               </div>
-              <input placeholder="Sujet" style={inputStyle} />
+              <input
+                placeholder="Sujet / Service souhaité"
+                style={inputStyle}
+                value={form.service}
+                onChange={(e) => setForm({ ...form, service: e.target.value })}
+              />
               <textarea
-                placeholder="Décrivez votre projet..."
+                placeholder="Décrivez votre projet... *"
                 rows={5}
                 style={{
                   ...inputStyle,
                   resize: "vertical" as const,
                   minHeight: 120,
                 }}
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
               />
+              {error && (
+                <p
+                  style={{
+                    color: "#f87171",
+                    fontSize: 13,
+                    textAlign: "center",
+                    margin: 0,
+                  }}
+                >
+                  {error}
+                </p>
+              )}
               <button
-                onClick={() => setSent(true)}
+                onClick={handleSubmit}
+                disabled={loading}
                 style={{
                   width: "100%",
                   padding: 16,
                   borderRadius: 10,
                   border: "none",
-                  background:
-                    "linear-gradient(135deg, var(--blue), var(--blue-d))",
+                  background: loading
+                    ? "rgba(33,150,243,0.4)"
+                    : "linear-gradient(135deg, var(--blue), var(--blue-d))",
                   color: "#fff",
                   fontSize: 16,
                   fontWeight: 700,
                   fontFamily: "var(--font-sans)",
-                  cursor: "pointer",
-                  boxShadow: "0 4px 24px rgba(33,150,243,0.25)",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  boxShadow: loading
+                    ? "none"
+                    : "0 4px 24px rgba(33,150,243,0.25)",
+                  transition: "all 0.2s",
                 }}
               >
-                Envoyer le message
+                {loading ? "Envoi en cours..." : "Envoyer le message"}
               </button>
             </div>
           )}
