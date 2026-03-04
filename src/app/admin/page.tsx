@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { useState, useRef } from "react";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import type { Project } from "../../lib/supabase";
 
 type FormData = {
@@ -45,10 +45,35 @@ function slugify(str: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+let supabaseInstance: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+    );
+  }
+  return supabaseInstance;
+}
+
+function sanitizeFileName(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9._-]/g, "-")
+    .replace(/-+/g, "-");
+}
+
+function sanitizeFolder(slug: string): string {
+  return (
+    slug
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9-]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/(^-|-$)/g, "") || "projet"
   );
 }
 
@@ -143,9 +168,12 @@ export default function AdminPage() {
     const uploaded: string[] = [];
 
     for (const file of Array.from(files)) {
-      const ext = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const filePath = `gallery/${form.slug || "projet"}/${fileName}`;
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const baseName = file.name.replace(/\.[^.]+$/, "");
+      const safeName = sanitizeFileName(baseName);
+      const safeFolder = sanitizeFolder(form.slug);
+      const fileName = `${Date.now()}-${safeName}.${ext}`;
+      const filePath = `gallery/${safeFolder}/${fileName}`;
 
       const { error } = await supabase.storage
         .from("projects")
