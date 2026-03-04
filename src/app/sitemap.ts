@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
 
+export const revalidate = 86400; // régénère toutes les 24h
+
 const BASE_URL = "https://fullstack-pointvirgule.fr";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -16,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     );
     const { data } = await supabase.from("projects").select("slug, updated_at");
     const projectRoutes: MetadataRoute.Sitemap = (data || []).map((p) => ({
