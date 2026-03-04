@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import type { Project } from "../../../lib/supabase";
+import ImageGallery from "../../../components/ImageGallery";
 
 async function getProject(slug: string): Promise<Project | null> {
   const supabase = createClient(
@@ -287,38 +288,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        {/* Images galerie */}
-        {project.images && project.images.length > 0 && (
-          <div style={{ marginTop: 40 }}>
-            <h2 style={{ color: "#fff", fontSize: 20, fontWeight: 700, marginBottom: 20 }}>
-              Galerie
-            </h2>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: 16,
-              }}
-            >
-              {project.images.map((img: string, i: number) => (
-                <div
-                  key={i}
-                  style={{
-                    borderRadius: 14,
-                    overflow: "hidden",
-                    border: "1px solid var(--border)",
-                  }}
-                >
-                  <img
-                    src={img}
-                    alt={`${project.title} ${i + 1}`}
-                    style={{ width: "100%", height: "auto", display: "block" }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Galerie avec modal */}
+        <ImageGallery
+          images={project.images || []}
+          projectTitle={project.title}
+          accentColor={color}
+        />
 
       </div>
     </main>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 import type { Project } from "../../lib/supabase";
 
 type FormData = {
@@ -44,14 +45,23 @@ function slugify(str: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+  );
+}
+
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
   const [authError, setAuthError] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [form, setForm] = useState<FormData>(emptyForm);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
   const [message, setMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
 
@@ -113,6 +123,7 @@ export default function AdminPage() {
       featured: project.featured || false,
       order_index: project.order_index || 0,
     });
+    setGalleryImages(project.images || []);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -120,8 +131,49 @@ export default function AdminPage() {
   function handleNew() {
     setEditingId(null);
     setForm(emptyForm);
+    setGalleryImages([]);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function handleImageUpload(files: FileList) {
+    if (!files.length) return;
+    setUploadingImages(true);
+    const supabase = getSupabase();
+    const uploaded: string[] = [];
+
+    for (const file of Array.from(files)) {
+      const ext = file.name.split(".").pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const filePath = `gallery/${form.slug || "projet"}/${fileName}`;
+
+      const { error } = await supabase.storage
+        .from("projects")
+        .upload(filePath, file, { upsert: false });
+
+      if (error) {
+        setMessage(`❌ Erreur upload ${file.name} : ${error.message}`);
+        continue;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("projects")
+        .getPublicUrl(filePath);
+
+      if (urlData?.publicUrl) {
+        uploaded.push(urlData.publicUrl);
+      }
+    }
+
+    setGalleryImages((prev) => [...prev, ...uploaded]);
+    setUploadingImages(false);
+    if (uploaded.length > 0) {
+      setMessage(`✅ ${uploaded.length} image(s) uploadée(s)`);
+    }
+  }
+
+  async function handleRemoveImage(url: string) {
+    setGalleryImages((prev) => prev.filter((img) => img !== url));
   }
 
   async function handleSubmit() {
@@ -136,6 +188,7 @@ export default function AdminPage() {
       ...form,
       tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
       metrics: form.metrics.split("\n").map((m) => m.trim()).filter(Boolean),
+      images: galleryImages,
     };
 
     const url = editingId ? `/api/admin/projects/${editingId}` : "/api/projects";
@@ -153,6 +206,7 @@ export default function AdminPage() {
     if (res.ok) {
       setMessage(editingId ? "✅ Projet modifié !" : "✅ Projet créé !");
       setForm(emptyForm);
+      setGalleryImages([]);
       setEditingId(null);
       setShowForm(false);
       fetchProjects(password);
@@ -310,7 +364,7 @@ export default function AdminPage() {
                 {editingId ? "Modifier la réalisation" : "Nouvelle réalisation"}
               </h2>
               <button
-                onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm); }}
+                onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm); setGalleryImages([]); }}
                 style={{
                   background: "none",
                   border: "1px solid var(--border)",
@@ -339,7 +393,7 @@ export default function AdminPage() {
                       slug: editingId ? f.slug : slugify(title),
                     }));
                   }}
-                  placeholder="Tresors d&apos;Ambre"
+                  placeholder="Trésors d'Ambre"
                 />
               </div>
               <div>
@@ -453,6 +507,146 @@ export default function AdminPage() {
                   Mettre en avant (featured)
                 </label>
               </div>
+
+              {/* ── GALERIE D'IMAGES ── */}
+              <div style={{ gridColumn: "1 / -1", marginTop: 8 }}>
+                <div
+                  style={{
+                    borderTop: "1px solid var(--border)",
+                    paddingTop: 24,
+                    marginBottom: 16,
+                  }}
+                >
+                  <label style={{ ...labelStyle, fontSize: 14, color: "#fff", marginBottom: 4 }}>
+                    Galerie de screenshots
+                  </label>
+                  <p style={{ color: "var(--text3)", fontSize: 12, marginBottom: 16 }}>
+                    JPG, PNG, WebP — plusieurs fichiers acceptés simultanément
+                  </p>
+
+                  {/* Zone d'upload */}
+                  <label
+                    style={{
+                      display: "flex",
+                      flexDirection: "column" as const,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      border: "2px dashed rgba(255,255,255,0.15)",
+                      borderRadius: 12,
+                      padding: "28px 20px",
+                      cursor: uploadingImages ? "not-allowed" : "pointer",
+                      background: "rgba(255,255,255,0.02)",
+                      transition: "border-color 0.2s, background 0.2s",
+                      opacity: uploadingImages ? 0.6 : 1,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!uploadingImages) {
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(33,150,243,0.5)";
+                        (e.currentTarget as HTMLElement).style.background = "rgba(33,150,243,0.04)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)";
+                    }}
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      disabled={uploadingImages}
+                      style={{ display: "none" }}
+                      onChange={(e) => e.target.files && handleImageUpload(e.target.files)}
+                    />
+                    <span style={{ fontSize: 28 }}>🖼️</span>
+                    <span style={{ color: "var(--text2)", fontSize: 14, fontWeight: 600 }}>
+                      {uploadingImages ? "Upload en cours..." : "Cliquer pour ajouter des images"}
+                    </span>
+                    <span style={{ color: "var(--text3)", fontSize: 12 }}>
+                      Sélection multiple possible (Ctrl+clic)
+                    </span>
+                  </label>
+                </div>
+
+                {/* Miniatures existantes */}
+                {galleryImages.length > 0 && (
+                  <div>
+                    <p style={{ color: "var(--text3)", fontSize: 12, marginBottom: 10 }}>
+                      {galleryImages.length} image{galleryImages.length > 1 ? "s" : ""} dans la galerie
+                    </p>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+                        gap: 10,
+                      }}
+                    >
+                      {galleryImages.map((img, i) => (
+                        <div
+                          key={i}
+                          style={{
+                            position: "relative",
+                            borderRadius: 10,
+                            overflow: "hidden",
+                            border: "1px solid var(--border)",
+                            aspectRatio: "16/10",
+                            background: "var(--surface)",
+                          }}
+                        >
+                          <img
+                            src={img}
+                            alt={`Galerie ${i + 1}`}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              display: "block",
+                            }}
+                          />
+                          {/* Bouton supprimer */}
+                          <button
+                            onClick={() => handleRemoveImage(img)}
+                            title="Retirer de la galerie"
+                            style={{
+                              all: "unset",
+                              cursor: "pointer",
+                              position: "absolute",
+                              top: 6,
+                              right: 6,
+                              width: 24,
+                              height: 24,
+                              borderRadius: "50%",
+                              background: "rgba(248,113,113,0.9)",
+                              color: "#fff",
+                              fontSize: 12,
+                              fontWeight: 700,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              lineHeight: 1,
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
+                              transition: "background 0.15s, transform 0.15s",
+                            }}
+                            onMouseEnter={(e) => {
+                              (e.currentTarget as HTMLElement).style.background = "#ef4444";
+                              (e.currentTarget as HTMLElement).style.transform = "scale(1.15)";
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLElement).style.background = "rgba(248,113,113,0.9)";
+                              (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+                            }}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* ── FIN GALERIE ── */}
+
             </div>
 
             <button
@@ -491,7 +685,7 @@ export default function AdminPage() {
                 color: "var(--text3)",
               }}
             >
-              Aucune réalisation pour l&apos;instant. Creez la premiere !
+              Aucune réalisation pour l&apos;instant. Créez la première !
             </div>
           ) : (
             projects.map((project) => (
@@ -525,6 +719,20 @@ export default function AdminPage() {
                         }}
                       >
                         FEATURED
+                      </span>
+                    )}
+                    {project.images && project.images.length > 0 && (
+                      <span
+                        style={{
+                          background: "rgba(16,185,129,0.12)",
+                          color: "#10B981",
+                          fontSize: 11,
+                          fontWeight: 700,
+                          padding: "2px 8px",
+                          borderRadius: 4,
+                        }}
+                      >
+                        {project.images.length} photo{project.images.length > 1 ? "s" : ""}
                       </span>
                     )}
                   </div>
