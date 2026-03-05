@@ -27,9 +27,9 @@ export default function Nav() {
   }, []);
 
   useEffect(() => {
-    if (!isHome) return; // pas de scroll-spy sur les pages détail
     const onScroll = () => {
       setScrolled(window.scrollY > 60);
+      if (!isHome) return; // scroll-spy uniquement sur la home
       for (const s of ["accueil", "services", "portfolio", "contact"]) {
         const el = document.getElementById(s);
         if (el) {
@@ -41,6 +41,7 @@ export default function Nav() {
         }
       }
     };
+    onScroll(); // état initial au montage
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
