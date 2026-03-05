@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import ThemeProvider from "../components/ThemeProvider";
 
@@ -128,6 +129,7 @@ export default function RootLayout({
         className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <ThemeProvider>{children}</ThemeProvider>
+        <GoogleAnalytics gaId="G-N7M39QWEHX" />
       </body>
     </html>
   );
