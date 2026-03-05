@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.1001.0",
+    "@next/bundle-analyzer": "^16.1.6",
     "@supabase/supabase-js": "^2.98.0",
     "next": "16.1.6",
     "react": "19.2.3",

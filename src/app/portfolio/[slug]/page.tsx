@@ -79,6 +79,7 @@ export default async function ProjectPage({
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Infos */}
       <div
+        key="infos"
         style={{
           background: "var(--surface)",
           border: "1px solid var(--border)",
@@ -123,6 +124,7 @@ export default async function ProjectPage({
       {/* Stack */}
       {project.tags && project.tags.length > 0 && (
         <div
+          key="stack"
           style={{
             background: "var(--surface)",
             border: "1px solid var(--border)",
@@ -165,6 +167,7 @@ export default async function ProjectPage({
       {/* Liens */}
       {(project.url || project.github_url) && (
         <div
+          key="liens"
           style={{
             background: "var(--surface)",
             border: "1px solid var(--border)",
