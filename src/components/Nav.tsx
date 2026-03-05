@@ -2,14 +2,22 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("accueil");
   const [isMobile, setIsMobile] = useState(false);
+
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  const [active, setActive] = useState(isHome ? "accueil" : "portfolio");
+
+  // Sur page détail, les liens pointent vers /#section, sinon #section
+  const href = (s: string) => (isHome ? `#${s}` : `/#${s}`);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -19,6 +27,7 @@ export default function Nav() {
   }, []);
 
   useEffect(() => {
+    if (!isHome) return; // pas de scroll-spy sur les pages détail
     const onScroll = () => {
       setScrolled(window.scrollY > 60);
       for (const s of ["accueil", "services", "portfolio", "contact"]) {
@@ -34,7 +43,7 @@ export default function Nav() {
     };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   const links = ["accueil", "services", "portfolio", "contact"];
 
@@ -129,7 +138,7 @@ export default function Nav() {
         }}
       >
         <Link
-          href="#accueil"
+          href={isHome ? "#accueil" : "/"}
           style={{
             display: "flex",
             alignItems: "center",
@@ -147,7 +156,7 @@ export default function Nav() {
         {!isMobile && (
           <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
             {links.map((s) => (
-              <Link key={s} href={`#${s}`} style={getLinkStyle(s)}>
+              <Link key={s} href={href(s)} style={getLinkStyle(s)}>
                 {s.charAt(0).toUpperCase() + s.slice(1)}
               </Link>
             ))}
@@ -195,7 +204,7 @@ export default function Nav() {
           {links.map((s) => (
             <Link
               key={s}
-              href={`#${s}`}
+              href={href(s)}
               onClick={() => setOpen(false)}
               style={getMobileLinkStyle(s)}
             >
