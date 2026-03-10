@@ -1,278 +1,358 @@
 "use client";
 
-import Typewriter from "./Typewriter";
+import useInView from "./useInView";
 
-export default function Hero() {
+const stacks = [
+  {
+    name: "WordPress\n+ WooCommerce",
+    icon: "🐘",
+    color: "#21759B",
+    bg: "rgba(33,117,155,0.08)",
+    border: "rgba(33,117,155,0.2)",
+    scores: { perf: [60, 85], seo: [85, 100], a11y: [80, 95], bp: [75, 95] },
+  },
+  {
+    name: "Shopify",
+    icon: "🛍️",
+    color: "#96BF48",
+    bg: "rgba(150,191,72,0.08)",
+    border: "rgba(150,191,72,0.2)",
+    scores: { perf: [65, 85], seo: [90, 100], a11y: [80, 95], bp: [85, 100] },
+  },
+  {
+    name: "Next.js\nheadless",
+    icon: "⚡",
+    color: "#2196F3",
+    bg: "rgba(33,150,243,0.08)",
+    border: "rgba(33,150,243,0.25)",
+    scores: { perf: [90, 100], seo: [95, 100], a11y: [90, 100], bp: [95, 100] },
+    highlight: true,
+  },
+  {
+    name: "Next.js\n+ Saleor",
+    icon: "🚀",
+    color: "#2196F3",
+    bg: "rgba(33,150,243,0.08)",
+    border: "rgba(33,150,243,0.25)",
+    scores: { perf: [90, 100], seo: [95, 100], a11y: [90, 100], bp: [95, 100] },
+    highlight: true,
+  },
+];
+
+const metrics = [
+  { key: "perf", label: "Performance" },
+  { key: "seo", label: "SEO" },
+  { key: "a11y", label: "Accessibilité" },
+  { key: "bp", label: "Bonnes pratiques" },
+];
+
+function ScoreBar({
+  min,
+  max,
+  highlight,
+  delay,
+  visible,
+}: {
+  min: number;
+  max: number;
+  highlight?: boolean;
+  delay: number;
+  visible: boolean;
+}) {
+  const avgScore = Math.round((min + max) / 2);
+  const color = highlight ? "#2196F3" : avgScore >= 85 ? "#22c55e" : avgScore >= 70 ? "#f59e0b" : "#ef4444";
+
   return (
-    <section
-      id="accueil"
-      style={{
-        minHeight: "auto",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
-        overflow: "hidden",
-        padding: "120px 24px 80px",
-      }}
-    >
-      {/* Glow effects */}
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
       <div
         style={{
-          position: "absolute",
-          top: "8%",
-          left: "5%",
-          width: 600,
-          height: 600,
-          background:
-            "radial-gradient(circle, rgba(33,150,243,0.07) 0%, transparent 70%)",
-          borderRadius: "50%",
-          filter: "blur(80px)",
-          animation: "float 8s ease-in-out infinite",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "5%",
-          right: 0,
-          width: 500,
-          height: 500,
-          background:
-            "radial-gradient(circle, rgba(21,101,192,0.05) 0%, transparent 70%)",
-          borderRadius: "50%",
-          filter: "blur(80px)",
-          animation: "float 10s ease-in-out infinite 2s",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Grid background */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.025,
-          backgroundImage:
-            "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent)",
-          maskImage:
-            "radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent)",
-        }}
-      />
-
-      <div
-        style={{
-          maxWidth: 820,
-          textAlign: "center",
+          flex: 1,
+          height: 8,
+          background: "rgba(255,255,255,0.06)",
+          borderRadius: 100,
+          overflow: "hidden",
           position: "relative",
-          zIndex: 1,
-          animation: "heroFadeIn 0.9s cubic-bezier(0.16,1,0.3,1) forwards",
         }}
       >
-        <span
+        {/* min bar */}
+        <div
           style={{
-            display: "inline-block",
-            padding: "6px 18px",
+            position: "absolute",
+            left: 0,
+            top: 0,
+            height: "100%",
+            width: visible ? `${min}%` : "0%",
+            background: `${color}44`,
             borderRadius: 100,
-            background: "rgba(33,150,243,0.08)",
-            border: "1px solid rgba(33,150,243,0.18)",
-            color: "var(--blue)",
-            fontSize: 12,
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            fontFamily: "var(--font-mono)",
-            marginBottom: 28,
+            transition: `width 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
           }}
-        >
-          DÉVELOPPEUR WEB FULLSTACK FREELANCE
-        </span>
-
-        <h1
+        />
+        {/* max bar */}
+        <div
           style={{
-            fontSize: "clamp(38px, 6.5vw, 68px)",
-            fontWeight: 900,
-            lineHeight: 1.08,
-            color: "var(--text)",
-            marginBottom: 20,
-            letterSpacing: "-0.03em",
+            position: "absolute",
+            left: 0,
+            top: 0,
+            height: "100%",
+            width: visible ? `${max}%` : "0%",
+            background: color,
+            borderRadius: 100,
+            transition: `width 0.8s cubic-bezier(0.16,1,0.3,1) ${delay + 100}ms`,
+            boxShadow: highlight ? `0 0 8px ${color}88` : "none",
+          }}
+        />
+      </div>
+      <span
+        style={{
+          fontSize: 11,
+          fontFamily: "var(--font-mono)",
+          color: highlight ? "#2196F3" : "var(--text3)",
+          minWidth: 60,
+          textAlign: "right",
+        }}
+      >
+        {min}–{max}
+      </span>
+    </div>
+  );
+}
+
+export default function LighthouseComparison() {
+  const { ref, visible } = useInView();
+
+  return (
+    <section
+      id="performance"
+      ref={ref}
+      style={{
+        padding: "100px 24px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Background glow */}
+      <div
+        style={{
+          position: "absolute",
+          top: "20%",
+          right: "-10%",
+          width: 500,
+          height: 500,
+          background: "radial-gradient(circle, rgba(33,150,243,0.05) 0%, transparent 70%)",
+          borderRadius: "50%",
+          filter: "blur(80px)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div style={{ maxWidth: 1000, margin: "0 auto", position: "relative" }}>
+        {/* Header */}
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: 60,
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(24px)",
+            transition: "all 0.7s cubic-bezier(0.16,1,0.3,1)",
           }}
         >
-          Je construis vos
-          <br />
           <span
             style={{
-              background: "linear-gradient(135deg, #42A5F5, #1E88E5, #64B5F6)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            <Typewriter />
-          </span>
-        </h1>
-
-        <p
-          style={{
-            fontSize: "clamp(16px, 2.2vw, 20px)",
-            color: "var(--text2)",
-            lineHeight: 1.7,
-            maxWidth: 580,
-            margin: "0 auto 12px",
-          }}
-        >
-          15+ ans de commerce, maintenant développeur fullstack.
-          <br />
-          Je comprends vos enjeux métier{" "}
-          <strong style={{ color: "var(--text)" }}>et</strong> je code vos
-          solutions.
-        </p>
-
-        <p
-          style={{
-            fontSize: 13,
-            color: "var(--text3)",
-            marginBottom: 36,
-            fontFamily: "var(--font-mono)",
-            letterSpacing: "0.02em",
-          }}
-        >
-          Technologies modernes · Code sur mesure · Zéro abonnement · Propriété
-          totale
-        </p>
-
-        <div
-          style={{
-            display: "flex",
-            gap: 14,
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <a
-            href="#portfolio"
-            style={{
-              display: "inline-block",
-              padding: "13px 28px",
-              borderRadius: 10,
-              background: "linear-gradient(135deg, var(--blue), var(--blue-d))",
-              color: "#fff",
-              fontSize: 15,
-              fontWeight: 600,
-              textDecoration: "none",
-              boxShadow: "0 4px 24px rgba(33,150,243,0.25)",
-            }}
-          >
-            Voir mes projets
-          </a>
-          <a
-            href="#contact"
-            style={{
-              display: "inline-block",
-              padding: "13px 28px",
-              borderRadius: 10,
-              background: "transparent",
-              border: "1px solid var(--border)",
-              color: "var(--text)",
-              fontSize: 15,
-              fontWeight: 600,
-              textDecoration: "none",
-            }}
-          >
-            Me contacter
-          </a>
-        </div>
-
-        {/* Terminal */}
-        <div
-          style={{
-            marginTop: 56,
-            borderRadius: 12,
-            overflow: "hidden",
-            border: "1px solid var(--border)",
-            maxWidth: 440,
-            marginLeft: "auto",
-            marginRight: "auto",
-            textAlign: "left",
-            background: "var(--bg2)",
-            boxShadow:
-              "0 24px 80px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              gap: 6,
+              display: "inline-flex",
               alignItems: "center",
-              padding: "11px 16px",
-              borderBottom: "1px solid var(--border)",
-              background: "var(--surface)",
+              gap: 8,
+              padding: "6px 18px",
+              borderRadius: 100,
+              background: "rgba(33,150,243,0.08)",
+              border: "1px solid rgba(33,150,243,0.18)",
+              color: "var(--blue)",
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              fontFamily: "var(--font-mono)",
+              marginBottom: 20,
             }}
           >
+            LIGHTHOUSE SCORES
+          </span>
+
+          <h2
+            style={{
+              fontSize: "clamp(28px, 4vw, 44px)",
+              fontWeight: 900,
+              color: "var(--text)",
+              lineHeight: 1.1,
+              letterSpacing: "-0.03em",
+              marginBottom: 16,
+            }}
+          >
+            Pourquoi les performances
+            <br />
             <span
               style={{
-                width: 10,
-                height: 10,
-                borderRadius: "50%",
-                background: "#ef4444",
-              }}
-            />
-            <span
-              style={{
-                width: 10,
-                height: 10,
-                borderRadius: "50%",
-                background: "#f59e0b",
-              }}
-            />
-            <span
-              style={{
-                width: 10,
-                height: 10,
-                borderRadius: "50%",
-                background: "#22c55e",
-              }}
-            />
-            <span
-              style={{
-                flex: 1,
-                textAlign: "center",
-                fontSize: 11,
-                color: "var(--text3)",
-                fontFamily: "var(--font-mono)",
+                background: "linear-gradient(135deg, #42A5F5, #1E88E5, #64B5F6)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
-              ~/fullstack-pointvirgule
+              font la différence
             </span>
-          </div>
-          <div
+          </h2>
+
+          <p
             style={{
-              padding: "16px 20px",
-              fontFamily: "var(--font-mono)",
-              fontSize: 13,
-              lineHeight: 1.9,
+              fontSize: 16,
+              color: "var(--text2)",
+              maxWidth: 520,
+              margin: "0 auto",
+              lineHeight: 1.6,
             }}
           >
-            <div>
-              <span style={{ color: "var(--green)" }}>➜</span>{" "}
-              <span style={{ color: "var(--blue)" }}>~</span> npx
-              create-next-app@latest mon-projet
+            Scores Lighthouse moyens observés selon la stack e-commerce.
+            <br />
+            Google récompense la vitesse — vos clients aussi.
+          </p>
+        </div>
+
+        {/* Cards grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 16,
+          }}
+        >
+          {stacks.map((stack, si) => (
+            <div
+              key={stack.name}
+              style={{
+                borderRadius: 16,
+                border: `1px solid ${stack.highlight ? "rgba(33,150,243,0.3)" : "var(--border)"}`,
+                background: stack.highlight
+                  ? "linear-gradient(135deg, rgba(33,150,243,0.06), rgba(30,136,229,0.03))"
+                  : "var(--bg2)",
+                padding: "24px 20px",
+                position: "relative",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(32px)",
+                transition: `all 0.7s cubic-bezier(0.16,1,0.3,1) ${si * 80}ms`,
+                boxShadow: stack.highlight
+                  ? "0 4px 32px rgba(33,150,243,0.1)"
+                  : "none",
+              }}
+            >
+              {stack.highlight && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -1,
+                    left: 20,
+                    right: 20,
+                    height: 2,
+                    background: "linear-gradient(90deg, transparent, #2196F3, transparent)",
+                    borderRadius: 100,
+                  }}
+                />
+              )}
+
+              {/* Stack name */}
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 22, marginBottom: 8 }}>{stack.icon}</div>
+                <div
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: stack.highlight ? "var(--blue)" : "var(--text)",
+                    whiteSpace: "pre-line",
+                    lineHeight: 1.3,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {stack.name}
+                </div>
+              </div>
+
+              {/* Metrics */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {metrics.map((m, mi) => {
+                  const [min, max] = stack.scores[m.key as keyof typeof stack.scores];
+                  return (
+                    <div key={m.key}>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: "var(--text3)",
+                          marginBottom: 5,
+                          fontFamily: "var(--font-mono)",
+                          letterSpacing: "0.02em",
+                        }}
+                      >
+                        {m.label}
+                      </div>
+                      <ScoreBar
+                        min={min}
+                        max={max}
+                        highlight={stack.highlight}
+                        delay={si * 80 + mi * 60 + 300}
+                        visible={visible}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Score moyen */}
+              <div
+                style={{
+                  marginTop: 20,
+                  paddingTop: 16,
+                  borderTop: "1px solid var(--border)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span style={{ fontSize: 11, color: "var(--text3)", fontFamily: "var(--font-mono)" }}>
+                  Performance moy.
+                </span>
+                <span
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 800,
+                    fontFamily: "var(--font-mono)",
+                    color: stack.highlight ? "#2196F3" : "var(--text2)",
+                  }}
+                >
+                  {stack.scores.perf[0]}–{stack.scores.perf[1]}
+                </span>
+              </div>
             </div>
-            <div style={{ color: "var(--text3)" }}>
-              ✔ TypeScript? <span style={{ color: "var(--green)" }}>Yes</span>
-            </div>
-            <div style={{ color: "var(--text3)" }}>
-              ✔ Tailwind CSS? <span style={{ color: "var(--green)" }}>Yes</span>
-            </div>
-            <div style={{ color: "var(--text3)" }}>
-              ✔ App Router? <span style={{ color: "var(--green)" }}>Yes</span>
-            </div>
-            <div style={{ color: "var(--green)", marginTop: 6 }}>
-              🚀 Votre projet est prêt !
-            </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Bottom note */}
+        <div
+          style={{
+            marginTop: 40,
+            padding: "20px 24px",
+            borderRadius: 12,
+            background: "rgba(33,150,243,0.04)",
+            border: "1px solid rgba(33,150,243,0.12)",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 14,
+            opacity: visible ? 1 : 0,
+            transition: "opacity 0.7s ease 600ms",
+          }}
+        >
+          <span style={{ fontSize: 18, flexShrink: 0 }}>💡</span>
+          <p style={{ fontSize: 13, color: "var(--text2)", lineHeight: 1.6, margin: 0 }}>
+            <strong style={{ color: "var(--text)" }}>Source :</strong> Approximations basées sur des audits Lighthouse fréquents.
+            Les scores varient selon l&apos;optimisation — un site Next.js mal configuré peut descendre, un WordPress optimisé peut monter.{" "}
+            <span style={{ color: "var(--blue)", fontFamily: "var(--font-mono)", fontSize: 12 }}>
+              Trésors d&apos;Ambre : 97/100 ⚡
+            </span>
+          </p>
         </div>
       </div>
     </section>
