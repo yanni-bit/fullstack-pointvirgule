@@ -7,13 +7,11 @@ import ThemeProvider from "../components/ThemeProvider";
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
-  display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  display: "swap",
 });
 
 const BASE_URL = "https://fullstack-pointvirgule.fr";
