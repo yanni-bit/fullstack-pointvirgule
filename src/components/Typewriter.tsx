@@ -11,7 +11,7 @@ const words = [
 
 export default function Typewriter() {
   const [index, setIndex] = useState(0);
-  const [text, setText] = useState("");
+  const [text, setText] = useState(words[0]);
   const [isDeleting, setIsDeleting] = useState(false);
   const idleRef = useRef<number | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
