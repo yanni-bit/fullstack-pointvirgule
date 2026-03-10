@@ -136,14 +136,14 @@ function ProjectCard({
             <span
               key={t}
               style={{
-                background: `${project.color}12`,
+                background: `${project.color}22`,
                 color: project.color,
                 padding: "5px 12px",
                 borderRadius: 6,
                 fontSize: 12,
                 fontWeight: 600,
                 fontFamily: "var(--font-mono)",
-                border: `1px solid ${project.color}30`,
+                border: `1px solid ${project.color}50`,
               }}
             >
               {t}
@@ -169,7 +169,7 @@ function ProjectCard({
 
 const COLORS = [
   "#F59E0B",
-  "#8B5CF6",
+  "#A78BFA",
   "#10B981",
   "#2196F3",
   "#EC4899",
