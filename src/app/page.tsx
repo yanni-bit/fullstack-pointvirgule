@@ -1,6 +1,7 @@
 import Nav from "../components/Nav";
 import Hero from "../components/Hero";
 import Services from "../components/Services";
+import LighthouseComparison from "../components/LighthouseComparison";
 import Portfolio from "../components/Portfolio";
 import TechStack from "../components/TechStack";
 import About from "../components/About";
@@ -31,6 +32,7 @@ export default async function Home() {
       <main>
         <Hero />
         <Services />
+        <LighthouseComparison />
         <Portfolio initialProjects={projects} />
         <TechStack />
         <About />
