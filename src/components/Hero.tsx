@@ -1,15 +1,11 @@
 "use client";
 
 import Typewriter from "./Typewriter";
-import useInView from "./useInView";
 
 export default function Hero() {
-  const { ref, visible } = useInView();
-
   return (
     <section
       id="accueil"
-      ref={ref}
       style={{
         minHeight: "auto",
         display: "flex",
@@ -74,9 +70,6 @@ export default function Hero() {
           textAlign: "center",
           position: "relative",
           zIndex: 1,
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(32px)",
-          transition: "all 0.9s cubic-bezier(0.16,1,0.3,1)",
         }}
       >
         <span
