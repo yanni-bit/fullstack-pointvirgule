@@ -7,6 +7,8 @@ import ThemeProvider from "../components/ThemeProvider";
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 const jetbrainsMono = JetBrains_Mono({
