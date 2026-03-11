@@ -2,33 +2,33 @@ export const SERVICES = [
   {
     icon: "🛒",
     title: "E-commerce sur mesure",
-    desc: "Sites marchands headless avec Saleor, Medusa.js ou solution custom. Zéro abonnement, code 100% à vous.",
+    desc: "Avec Shopify, vous êtes locataire : commissions, abonnements plugins, dépendance totale. Je construis votre boutique comme un actif qui vous appartient — code source inclus, zéro loyer mensuel.",
     benefit:
-      "💡 Vendez sans payer de commission à Shopify — économisez jusqu'à 300€/mois.",
+      "💡 300€/mois de frais Shopify × 12 = 3 600€/an qui restent dans votre poche.",
     techs: ["Next.js", "Saleor", "Medusa.js", "Stripe"],
   },
   {
     icon: "🌐",
     title: "Sites vitrines & apps web",
-    desc: "Interfaces modernes, rapides et responsive. SEO natif, performances au top, design sur mesure.",
+    desc: "Un site lent perd des clients avant même qu'ils lisent votre offre. Je livre des interfaces rapides, SEO natif et accessibles — sans plugin payant, sans abonnement, sans compromis.",
     benefit:
-      "💡 Soyez premier sur Google grâce au SEO natif de Next.js — sans plugin payant.",
+      "💡 +1s de chargement = -7% de conversions. Mon LCP mobile : 2,0s.",
     techs: ["Next.js", "React", "Angular", "TypeScript"],
   },
   {
     icon: "🔄",
     title: "Migration & modernisation",
-    desc: "Exit WordPress et Shopify. Migration vers une stack moderne : vos données, votre code, votre liberté.",
+    desc: "WordPress et Shopify vous coûtent en plugins, en maintenance et en marge. Je migre votre contenu et vos données vers une stack moderne — vous reprenez la main sur votre outil et vos coûts.",
     benefit:
-      "💡 Reprenez le contrôle total de vos données et de vos coûts — zéro dépendance.",
+      "💡 Vos données, votre code, votre liberté — zéro dépendance à une plateforme tierce.",
     techs: ["Node.js", "PostgreSQL", "Docker", "REST"],
   },
   {
     icon: "⚡",
     title: "API & intégrations",
-    desc: "Backend robuste, APIs REST ou GraphQL, intégrations tierces et automatisations métier.",
+    desc: "Les tâches répétitives — imports, exports, synchronisations, relances — mangent du temps et génèrent des erreurs. Je les automatise pour que votre équipe se concentre sur ce qui crée de la valeur.",
     benefit:
-      "💡 Automatisez vos processus répétitifs — gagnez du temps, réduisez les erreurs.",
+      "💡 1h/jour automatisée = 250h/an récupérées. Votre temps vaut plus que ça.",
     techs: ["Node.js", "GraphQL", "Prisma", "Redis"],
   },
 ];

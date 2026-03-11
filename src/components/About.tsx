@@ -8,7 +8,7 @@ export default function About() {
   const stats = [
     { value: "15+", label: "ans de commerce" },
     { value: "3", label: "projets livrés" },
-    { value: "30€", label: "/heure" },
+    { value: "30€", label: "/h · tarif de lancement" },
   ];
 
   return (
@@ -72,12 +72,14 @@ export default function About() {
             Développeur Fullstack · Gérant de Trésors d&apos;Ambre
           </p>
           <p style={{ color: "var(--text2)", fontSize: 15, lineHeight: 1.8 }}>
-            Après 15 ans dans le commerce et la gestion d&apos;entreprise,
-            j&apos;ai choisi la reconversion pour allier ma compréhension des
-            enjeux business avec le développement web moderne. Résultat : je ne
-            code pas juste des features — je comprends{" "}
-            <strong style={{ color: "var(--text)" }}>pourquoi</strong> elles
-            comptent pour votre business.
+            Après 15 ans à gérer des marges, des stocks et des équipes,
+            je sais qu&apos;un beau site qui ne convertit pas est une perte
+            d&apos;argent. Je ne suis pas qu&apos;un développeur —{" "}
+            <strong style={{ color: "var(--text)" }}>
+              j&apos;ai été à votre place.
+            </strong>{" "}
+            Je construis des outils qui servent vos objectifs business : moins
+            de coûts fixes, plus de marge, propriété totale de votre code.
           </p>
           <div
             style={{
