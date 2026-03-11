@@ -180,6 +180,114 @@ function StackCard({ s }: { s: typeof stacks[0] }) {
   );
 }
 
+function ScreenshotGallery() {
+  const [modalSrc, setModalSrc] = useState<string | null>(null);
+
+  const screenshots = [
+    { icon: "📱", label: "MOBILE · Moto G Power · 4G lente", src: "/images/lighthouse-mobile.png", alt: "Rapport Lighthouse mobile - 98/100/100/100" },
+    { icon: "🖥️", label: "BUREAU · Émulation ordinateur", src: "/images/lighthouse-bureau.png", alt: "Rapport Lighthouse bureau - 100/100/100/100" },
+  ];
+
+  return (
+    <>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: 16,
+          marginBottom: 16,
+        }}
+      >
+        {screenshots.map((item) => (
+          <div
+            key={item.label}
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: 14,
+              overflow: "hidden",
+              cursor: "zoom-in",
+            }}
+            onClick={() => setModalSrc(item.src)}
+          >
+            <div
+              style={{
+                padding: "12px 20px",
+                borderBottom: "1px solid var(--border)",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <span style={{ fontSize: 16 }}>{item.icon}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text3)", letterSpacing: "0.1em", fontFamily: "var(--font-mono)" }}>
+                {item.label}
+              </span>
+              <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--text3)" }}>🔍</span>
+            </div>
+            <img
+              src={item.src}
+              alt={item.alt}
+              style={{ width: "100%", display: "block" }}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+
+      {modalSrc && (
+        <div
+          onClick={() => setModalSrc(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 1000,
+            background: "rgba(0,0,0,0.85)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 24,
+            cursor: "zoom-out",
+          }}
+        >
+          <img
+            src={modalSrc}
+            alt="Lighthouse rapport agrandi"
+            style={{
+              maxWidth: "90vw",
+              maxHeight: "90vh",
+              borderRadius: 12,
+              boxShadow: "0 32px 80px rgba(0,0,0,0.6)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setModalSrc(null)}
+            style={{
+              position: "absolute",
+              top: 20,
+              right: 24,
+              background: "rgba(255,255,255,0.1)",
+              border: "none",
+              color: "#fff",
+              fontSize: 22,
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function LighthouseComparison() {
   const { ref, visible } = useInView();
   const [isMobile, setIsMobile] = useState(false);
@@ -584,6 +692,33 @@ export default function LighthouseComparison() {
                 </span>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Captures d'écran réelles + note GA4 */}
+        <div style={{ marginTop: 32 }}>
+          <ScreenshotGallery />
+          <div
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid var(--border)",
+              borderRadius: 10,
+              padding: "14px 20px",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 12,
+            }}
+          >
+            <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>ℹ️</span>
+            <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.7, margin: 0 }}>
+              <strong style={{ color: "var(--text2)" }}>Variations du score selon les runs : </strong>
+              Google Analytics (GA4) charge un script tiers de ~149 KiB qui peut varier entre 50 ms
+              et 200 ms selon la charge des serveurs Google au moment du test. Cela peut faire
+              fluctuer le score Lighthouse de quelques points d&apos;un run à l&apos;autre — sans
+              aucune conséquence sur le référencement. Google utilise les{" "}
+              <strong style={{ color: "var(--text2)" }}>Core Web Vitals réels</strong> (LCP, CLS,
+              INP) mesurés sur vos vrais utilisateurs, pas le score de laboratoire.
+            </p>
           </div>
         </div>
       </div>
