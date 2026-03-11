@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import useInView from "./useInView";
 
 const stacks = [
@@ -147,8 +148,48 @@ function MyScoreBadge({ value, label }: { value: number; label: string }) {
   );
 }
 
+function StackCard({ s }: { s: typeof stacks[0] }) {
+  return (
+    <div
+      style={{
+        background: s.highlight ? "rgba(33,150,243,0.04)" : `${s.color}08`,
+        border: `1px solid ${s.highlight ? "rgba(33,150,243,0.2)" : s.color + "30"}`,
+        borderRadius: 12,
+        padding: "16px 18px",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+        <span style={{ width: 8, height: 8, borderRadius: "50%", background: s.color, display: "inline-block", boxShadow: `0 0 6px ${s.color}80`, flexShrink: 0 }} />
+        <span style={{ fontSize: 13, fontWeight: s.highlight ? 700 : 500, color: s.highlight ? "var(--text)" : "var(--text2)" }}>
+          {s.name}
+        </span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {metrics.map((m) => (
+          <div key={m.key} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", fontFamily: "var(--font-mono)", minWidth: 90, letterSpacing: "0.06em" }}>
+              {m.label.toUpperCase()}
+            </span>
+            <div style={{ flex: 1 }}>
+              <ScoreBar min={s[m.key][0]} max={s[m.key][1]} color={s.color} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function LighthouseComparison() {
   const { ref, visible } = useInView();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <section style={{ padding: "80px 24px", background: "var(--bg)" }}>
@@ -258,7 +299,14 @@ export default function LighthouseComparison() {
           </div>
         </div>
 
-        {/* Tableau comparatif */}
+        {/* Tableau comparatif desktop / Cards mobile */}
+        {isMobile ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 32 }}>
+            {stacks.map((s) => (
+              <StackCard key={s.name} s={s} />
+            ))}
+          </div>
+        ) : (
         <div
           style={{
             background: "var(--surface)",
@@ -356,6 +404,7 @@ export default function LighthouseComparison() {
             </div>
           ))}
         </div>
+        )}
 
         {/* Pourquoi + Point SEO */}
         <div
@@ -478,7 +527,7 @@ export default function LighthouseComparison() {
                 marginBottom: 12,
               }}
             >
-              POURQUOI MA SOLUTION FAIT LA DIFFÉRENCE
+              POINT IMPORTANT POUR LE SEO
             </div>
             <p
               style={{
@@ -488,17 +537,16 @@ export default function LighthouseComparison() {
                 marginBottom: 16,
               }}
             >
-              WordPress et Shopify peuvent obtenir de bons scores SEO — mais{" "}
+              Google ne demande pas forcément 100. Un site est déjà{" "}
               <strong style={{ color: "var(--text)" }}>
-                la performance mobile réelle
+                très performant à partir de 80–85
               </strong>{" "}
-              reste leur point faible. C&apos;est précisément ce que Google
-              mesure pour le classement.
+              si les Core Web Vitals sont au vert.
             </p>
             {[
-              { metric: "LCP", target: "2,0 s", desc: "vs ~4s sur Shopify/WP", good: true },
-              { metric: "CLS", target: "0.01", desc: "zéro décalage visuel", good: true },
-              { metric: "TBT", target: "80 ms", desc: "vs ~400ms sur WordPress", good: true },
+              { metric: "LCP", target: "< 2.5s", desc: "Largest Contentful Paint" },
+              { metric: "CLS", target: "< 0.1", desc: "Cumulative Layout Shift" },
+              { metric: "INP", target: "< 200ms", desc: "Interaction to Next Paint" },
             ].map((cwv) => (
               <div
                 key={cwv.metric}
@@ -536,95 +584,6 @@ export default function LighthouseComparison() {
                 </span>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Captures d'écran réelles + note GA4 */}
-        <div style={{ marginTop: 32 }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: 16,
-              marginBottom: 16,
-            }}
-          >
-            {[
-              {
-                icon: "📱",
-                label: "MOBILE · Moto G Power · 4G lente",
-                src: "/images/lighthouse-mobile.png",
-                alt: "Rapport Lighthouse mobile - 98/100/100/100",
-              },
-              {
-                icon: "🖥️",
-                label: "BUREAU · Émulation ordinateur",
-                src: "/images/lighthouse-bureau.png",
-                alt: "Rapport Lighthouse bureau - 100/100/100/100",
-              },
-            ].map((item) => (
-              <div
-                key={item.label}
-                style={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 14,
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    padding: "12px 20px",
-                    borderBottom: "1px solid var(--border)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  <span style={{ fontSize: 16 }}>{item.icon}</span>
-                  <span
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: "var(--text3)",
-                      letterSpacing: "0.1em",
-                      fontFamily: "var(--font-mono)",
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                </div>
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  style={{ width: "100%", display: "block" }}
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div
-            style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid var(--border)",
-              borderRadius: 10,
-              padding: "14px 20px",
-              display: "flex",
-              alignItems: "flex-start",
-              gap: 12,
-            }}
-          >
-            <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>ℹ️</span>
-            <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.7, margin: 0 }}>
-              <strong style={{ color: "var(--text2)" }}>Variations du score selon les runs : </strong>
-              Google Analytics (GA4) charge un script tiers de ~149 KiB qui peut varier entre 50 ms
-              et 200 ms selon la charge des serveurs Google au moment du test. Cela peut faire
-              fluctuer le score Lighthouse de quelques points d&apos;un run à l&apos;autre — sans
-              aucune conséquence sur le référencement. Google utilise les{" "}
-              <strong style={{ color: "var(--text2)" }}>Core Web Vitals réels</strong> (LCP, CLS,
-              INP) mesurés sur vos vrais utilisateurs, pas le score de laboratoire.
-            </p>
           </div>
         </div>
       </div>
