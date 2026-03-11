@@ -11,7 +11,7 @@ const words = [
 
 export default function Typewriter() {
   const [index, setIndex] = useState(0);
-  const [text, setText] = useState(words[0]);
+  const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const idleRef = useRef<number | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -59,7 +59,12 @@ export default function Typewriter() {
       {text}
       <span
         className="text-[var(--blue)]"
-        style={{ animation: "blink 1s step-end infinite" }}
+        style={{
+          animation: "blink 1s step-end infinite",
+          display: "inline-block",
+          width: "0.5ch",
+          textAlign: "center",
+        }}
       >
         |
       </span>
