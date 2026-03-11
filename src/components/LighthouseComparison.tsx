@@ -537,6 +537,95 @@ export default function LighthouseComparison() {
             ))}
           </div>
         </div>
+
+        {/* Captures d'écran réelles + note GA4 */}
+        <div style={{ marginTop: 32 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: 16,
+              marginBottom: 16,
+            }}
+          >
+            {[
+              {
+                icon: "📱",
+                label: "MOBILE · Moto G Power · 4G lente",
+                src: "/images/lighthouse-mobile.png",
+                alt: "Rapport Lighthouse mobile - 98/100/100/100",
+              },
+              {
+                icon: "🖥️",
+                label: "BUREAU · Émulation ordinateur",
+                src: "/images/lighthouse-bureau.png",
+                alt: "Rapport Lighthouse bureau - 100/100/100/100",
+              },
+            ].map((item) => (
+              <div
+                key={item.label}
+                style={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 14,
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "12px 20px",
+                    borderBottom: "1px solid var(--border)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <span style={{ fontSize: 16 }}>{item.icon}</span>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: "var(--text3)",
+                      letterSpacing: "0.1em",
+                      fontFamily: "var(--font-mono)",
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                </div>
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  style={{ width: "100%", display: "block" }}
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid var(--border)",
+              borderRadius: 10,
+              padding: "14px 20px",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 12,
+            }}
+          >
+            <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>ℹ️</span>
+            <p style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.7, margin: 0 }}>
+              <strong style={{ color: "var(--text2)" }}>Variations du score selon les runs : </strong>
+              Google Analytics (GA4) charge un script tiers de ~149 KiB qui peut varier entre 50 ms
+              et 200 ms selon la charge des serveurs Google au moment du test. Cela peut faire
+              fluctuer le score Lighthouse de quelques points d&apos;un run à l&apos;autre — sans
+              aucune conséquence sur le référencement. Google utilise les{" "}
+              <strong style={{ color: "var(--text2)" }}>Core Web Vitals réels</strong> (LCP, CLS,
+              INP) mesurés sur vos vrais utilisateurs, pas le score de laboratoire.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
