@@ -478,7 +478,7 @@ export default function LighthouseComparison() {
                 marginBottom: 12,
               }}
             >
-              POINT IMPORTANT POUR LE SEO
+              POURQUOI MA SOLUTION FAIT LA DIFFÉRENCE
             </div>
             <p
               style={{
@@ -488,16 +488,17 @@ export default function LighthouseComparison() {
                 marginBottom: 16,
               }}
             >
-              Google ne demande pas forcément 100. Un site est déjà{" "}
+              WordPress et Shopify peuvent obtenir de bons scores SEO — mais{" "}
               <strong style={{ color: "var(--text)" }}>
-                très performant à partir de 80–85
+                la performance mobile réelle
               </strong>{" "}
-              si les Core Web Vitals sont au vert.
+              reste leur point faible. C&apos;est précisément ce que Google
+              mesure pour le classement.
             </p>
             {[
-              { metric: "LCP", target: "< 2.5s", desc: "Largest Contentful Paint" },
-              { metric: "CLS", target: "< 0.1", desc: "Cumulative Layout Shift" },
-              { metric: "INP", target: "< 200ms", desc: "Interaction to Next Paint" },
+              { metric: "LCP", target: "2,0 s", desc: "vs ~4s sur Shopify/WP", good: true },
+              { metric: "CLS", target: "0.01", desc: "zéro décalage visuel", good: true },
+              { metric: "TBT", target: "80 ms", desc: "vs ~400ms sur WordPress", good: true },
             ].map((cwv) => (
               <div
                 key={cwv.metric}
