@@ -8,6 +8,7 @@ import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import { createPublicClient } from "../lib/supabase";
 import type { Project } from "../lib/types";
+import LighthouseComparison from "../components/LighthouseComparison";
 
 async function getProjects(): Promise<Project[]> {
   try {
@@ -31,6 +32,7 @@ export default async function Home() {
       <main>
         <Hero />
         <Services />
+        <LighthouseComparison />
         <Portfolio initialProjects={projects} />
         <TechStack />
         <About />
