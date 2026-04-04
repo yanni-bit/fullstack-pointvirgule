@@ -40,7 +40,9 @@ function ProjectCard({
         transition: `all 0.6s ease ${index * 0.12}s`,
         cursor: project.slug ? "pointer" : "default",
         textDecoration: "none",
-        display: "block",
+        display: "flex",
+        flexDirection: "column" as const,
+        height: "100%",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "var(--border-h)";
@@ -57,7 +59,14 @@ function ProjectCard({
           background: `linear-gradient(90deg, ${project.color}, ${project.color}66)`,
         }}
       />
-      <div style={{ padding: "28px 28px 24px" }}>
+      <div
+        style={{
+          padding: "28px 28px 24px",
+          display: "flex",
+          flexDirection: "column" as const,
+          flex: 1,
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -98,6 +107,7 @@ function ProjectCard({
             fontSize: 14.5,
             lineHeight: 1.7,
             marginBottom: 22,
+            flex: 1,
           }}
         >
           {project.desc}
@@ -158,7 +168,7 @@ function ProjectCard({
     return (
       <Link
         href={`/portfolio/${project.slug}`}
-        style={{ textDecoration: "none" }}
+        style={{ textDecoration: "none", display: "flex" }}
       >
         {cardContent}
       </Link>
