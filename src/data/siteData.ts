@@ -4,7 +4,7 @@ export const SERVICES = [
     title: "E-commerce sur mesure",
     desc: "Avec Shopify, vous êtes locataire : commissions, abonnements plugins, dépendance totale. Je construis votre boutique comme un actif qui vous appartient — code source inclus, zéro loyer mensuel.",
     benefit:
-      "💡 300€/mois de frais Shopify × 12 = 3 600€/an qui restent dans votre poche.",
+      "💡 Shopify coûte entre 77€ et 205€/mois (abo + apps) + commissions sur chaque vente. Sur 3 ans, c'est 2 800€ à 7 400€ économisés.",
     techs: ["Next.js", "Saleor", "Medusa.js", "Stripe"],
   },
   {

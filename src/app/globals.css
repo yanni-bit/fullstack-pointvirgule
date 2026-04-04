@@ -101,3 +101,39 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ── SERVICE CARDS GRID ALIGNMENT ── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.service-card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 5; /* icône, titre, desc, benefit, techs */
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px;
+  cursor: default;
+}
+
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .service-card {
+    grid-row: span 5;
+  }
+}
+
+@media (max-width: 640px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  .service-card {
+    grid-row: span 5;
+  }
+}

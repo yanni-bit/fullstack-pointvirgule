@@ -15,17 +15,11 @@ function ServiceCard({
   return (
     <div
       ref={ref}
+      className="service-card"
       style={{
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius)",
-        padding: 30,
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(20px)",
         transition: `all 0.55s ease ${index * 0.1}s`,
-        cursor: "default",
-        display: "flex",
-        flexDirection: "column",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "var(--border-h)";
@@ -36,13 +30,12 @@ function ServiceCard({
         e.currentTarget.style.background = "var(--surface)";
       }}
     >
-      <div style={{ fontSize: 34, marginBottom: 14 }}>{service.icon}</div>
+      <div style={{ fontSize: 34 }}>{service.icon}</div>
       <h3
         style={{
           color: "var(--text)",
           fontSize: 19,
           fontWeight: 700,
-          marginBottom: 10,
         }}
       >
         {service.title}
@@ -52,33 +45,39 @@ function ServiceCard({
           color: "var(--text2)",
           fontSize: 14.5,
           lineHeight: 1.7,
-          marginBottom: 14,
         }}
       >
         {service.desc}
       </p>
 
-      {/* Bénéfice client */}
-      {"benefit" in service && service.benefit && (
+      {/* Bénéfice client — aligné par subgrid */}
+      {"benefit" in service && service.benefit ? (
         <p
           style={{
             color: "var(--blue)",
             fontSize: 13,
             lineHeight: 1.6,
-            marginBottom: 18,
             padding: "10px 14px",
             background: "rgba(33,150,243,0.06)",
             borderRadius: 8,
             borderLeft: "3px solid var(--blue)",
             fontStyle: "italic",
+            alignSelf: "start",
           }}
         >
           {service.benefit}
         </p>
+      ) : (
+        <div />
       )}
 
       <div
-        style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: "auto" }}
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 6,
+          alignSelf: "end",
+        }}
       >
         {service.techs.map((t) => (
           <span
@@ -141,13 +140,7 @@ export default function Services() {
             Ce que je peux faire pour vous
           </h2>
         </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: 20,
-          }}
-        >
+        <div className="services-grid">
           {SERVICES.map((s, i) => (
             <ServiceCard key={s.title} service={s} index={i} />
           ))}
