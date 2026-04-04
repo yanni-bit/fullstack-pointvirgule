@@ -12,7 +12,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self'",
-      "connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com",
+      "connect-src 'self' https://*.supabase.co https://*.google-analytics.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com",
       "frame-ancestors 'none'",
     ].join("; "),
   },
