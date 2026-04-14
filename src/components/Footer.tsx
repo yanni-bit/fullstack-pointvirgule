@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   const links = [
@@ -39,6 +40,17 @@ export default function Footer() {
         </div>
         <nav aria-label="Liens réseaux">
           <div style={{ display: "flex", gap: 20 }}>
+            <Link
+              href="/mentions-legales"
+              style={{
+                color: "var(--text3)",
+                fontSize: 13,
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+            >
+              Mentions légales
+            </Link>
             {links.map((l) => (
               <a
                 key={l.label}
